@@ -113,6 +113,51 @@ IEnumerator Start()
     Sprite spr = sprAtlas.GetSprite("spritenameinatlas");
 
     sprRenderer.sprite = spr;
+	/* */
+
+
+    /* case: extract and read Text content */
+    AssetBundleCreateRequest textdataResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commondata"));
+
+    yield return new WaitWhile(() => textdataResult.isDone == false);
+
+    AssetBundle textPack = textdataResult.assetBundle as AssetBundle;
+    TextAsset   textData = textPack.LoadAsset<TextAsset>("textFilename");
+
+    if (textData == null) { Debug.Log("Error Loading Text Data"); }
+
+    string textContent = textData.text; // read text
+    Debug.Log( textContent ); 
+
+    // OR read & parse text data as Json 
+    // e.g. MyJsonObjectType jsonObj = JsonUtility.FromJson<MyJsonObjectType>(textData.text);
+    // See Json.cs for better example
+
+    // note: setting Unload(true) will unload all loaded assets from that bundle
+    //       e.g. textPack.Unload(true);
+    textPack.Unload(false);
+	/* */
+	
+	
+	/* case: extract and use Font */
+    Text textComponent = gameObject.AddComponent<Text>();  // Text requires a Canvas to display and is using UnityEngine.UI (See UI.cs for better example)
+    
+	// load content from an assetBundle file residing in "Resources" folder, named "commonfonts"
+    AssetBundleCreateRequest fontPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commonfonts"));
+
+    yield return new WaitWhile(() => fontPackResult.isDone == false);
+
+    AssetBundle fontPack = fontPackResult.assetBundle as AssetBundle;
+    Font        fnt      = fontPack.LoadAsset<Font>("fontname");
+
+    if (fnt == null) { Debug.Log("Error Loading Font"); }
+
+    // note: setting Unload(true) will unload all loaded assets from that bundle
+    //       e.g. fontPack.Unload(true);
+    fontPack.Unload(false);
+
+    textComponent.font = fnt;
+    /* */
 
 }
 
@@ -123,6 +168,7 @@ IEnumerator Start()
 
 // note: place script in "Editor" folder
 //       also add more menu items for other platforms
+//       Different Asset Bundles need to be generated for each target platform
 
 [MenuItem("Tools/Assets/Build Asset Bundle/Windows")]
 static void BuildAssetBundlesWin()

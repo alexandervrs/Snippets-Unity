@@ -9,7 +9,7 @@ using UnityEngine;
 
 
 /* -----------------------------------------
-   Load Json as Object
+   Setup Json Object
 ----------------------------------------- */
 
 // create a class first (outside main class)
@@ -33,11 +33,51 @@ public class SettingsVideo
 /// more ...
 
 
+/* -----------------------------------------
+   Load Json as Object
+----------------------------------------- */
+// note: requires a suitable Object (see "Setup Json Object" above)
 
 // load json data (from inside method)
-SettingsObj = JsonUtility.FromJson<Settings>("{\"video\":{ \"fullscreen\":\"1\", \"vsync\": \"1\" }}");
-bool isFullscreen = (SettingsObj.video.fullscreen).Equals("1");
+Settings settingsData = JsonUtility.FromJson<Settings>("{\"video\":{ \"fullscreen\":\"1\", \"vsync\": \"1\" }}");
+
+bool isFullscreen = (settingsData.video.fullscreen).Equals("1");
 if (isFullscreen) {
 	// fullscreen is enabled in Settings ...
 }
+
+
+// OR load json data from Resources folder (as TextAsset text)
+
+// -------------( AppSettings.json )--------------
+{
+	"video":{
+		"fullscreen":"1",
+		"vsync": "1"
+	}
+}
+// -------------( AppSettings.json )--------------
+
+TextAsset textAsset   = Resources.Load<TextAsset>("AppSettings");
+Settings settingsData = JsonUtility.FromJson<Settings>(textAsset.text);
+
+bool isFullscreen = (settingsData.video.fullscreen).Equals("1");
+if (isFullscreen) {
+	// fullscreen is enabled in Settings ...
+}
+
+
+/* -----------------------------------------
+   Save Object data as Json
+----------------------------------------- */
+// note: requires a suitable Object (see "Setup Json Object" above)
+
+Settings settingsData = new Settings();
+
+// change settings values under "video" section
+settingsData.video.fullscreen = "0";
+settingsData.video.vsync      = "1";
+
+string jsonFormattedString = JsonUtility.ToJson(settingsData);
+// save jsonFormattedString to file etc. ...
 
