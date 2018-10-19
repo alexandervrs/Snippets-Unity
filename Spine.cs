@@ -2,6 +2,8 @@
 /**
  * Spine.cs
  * Spine related snippets for Unity
+ *
+ * http://esotericsoftware.com/spine-unity-download
  */
 
 /* using */

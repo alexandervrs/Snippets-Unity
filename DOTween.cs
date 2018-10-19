@@ -2,6 +2,8 @@
 /**
  * DOTween.cs
  * DOTween related snippets for Unity
+ *
+ * https://assetstore.unity.com/packages/tools/visual-scripting/dotween-pro-32416
  */
 
 /* using */
@@ -56,6 +58,7 @@ gameObject.transform.DORotate(new Vector3(
 	gameObject.transform.rotation.y+180.0f, 
 	gameObject.transform.rotation.z-180.0f
 ), 1.5f, RotateMode.FastBeyond360).SetEase(Ease.OutSine);
+// note: RotateMode: LocalAxisAdd & WorldAxisAdd are relative like you are using Rotate(), sometimes they are better e.g. rotating around a 3D object
 
 // animate scale
 gameObject.transform.DOScale(new Vector3(
