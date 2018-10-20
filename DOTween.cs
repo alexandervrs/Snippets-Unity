@@ -68,7 +68,8 @@ gameObject.transform.DOScale(new Vector3(
 ), 1.5f).SetEase(Ease.OutSine);
 
 // animate alpha
-gameObject.transform.GetComponent<Renderer>().material.DOFade(1.5f, 0.0f).SetEase(Ease.OutSine).OnComplete(() => {
+// use either <Renderer>, <SpriteRenderer> or <MeshRenderer> based on what you want to fade
+gameObject.transform.GetComponent<Renderer>().material.DOFade(0.5f, 1.2f).SetEase(Ease.OutSine).OnComplete(() => { // DOFade(endValue, duration)
 	// fade complete ...
 });
 
