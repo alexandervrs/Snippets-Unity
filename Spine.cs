@@ -7,28 +7,127 @@
  */
 
 /* using */
-using Spine.Unity;
+using Spine; // for TrackEntry, AnimationState, Event
+using Spine.Unity; // for SkeletonAnimation
 
 
 /* -----------------------------------------
-   Setup New Spine SkeletonData
+   Setup Spine
 ----------------------------------------- */
+
 /*
-	Unity needs the Spine Atlas file exported from Spine with .atlas.txt extension
+	1. In your Unity project, you need the runtime installed once, get the package from http://esotericsoftware.com/spine-unity-download
+    2. Export your animations from Spine, select JSON
+    3. Create Atlas & click on Settings. Unity needs the Spine Atlas file exported from Spine with .atlas.txt extension,
+       change it under Options > Atlas Extension
+    4. Drag and drop the exported assets in Unity (atlas.txt, images, json) to import the skeleton data and images
+    5. Drag and drop the SkeletonData asset in your Scene and create Spine Animation GameObject from it
 */
 
 
 /* -----------------------------------------
    Change Skeleton Animation
 ----------------------------------------- */
+/// Class Body:
+SkeletonAnimation spineSkeleton;
 
-SkeletonAnimation spineAnim;
+/// Start():
+spineSkeleton = GetComponent<SkeletonAnimation>();
 
-spineAnim = GetComponent<SkeletonAnimation>();
+/// Start(), Update():
+spineSkeleton.AnimationName = "run"; // set to animation name
+spineSkeleton.timeScale     = 1.0f;  // animation speed timescale
+spineSkeleton.loop          = true;  // is looping
+spineSkeleton.initialFlipX  = false; // whether to flip X
+spineSkeleton.initialFlipY  = false; // whether to flip Y
 
-spineAnim.AnimationName = "run"; // set to animation name
-spineAnim.timeScale     = 1.0f;  // animation speed timescale
-spineAnim.loop          = true;  // is looping
-spineAnim.initialFlipX  = false; // whether to flip X
-spineAnim.initialFlipY  = false; // whether to flip Y
+
+/* -----------------------------------------
+   Playback control
+----------------------------------------- */
+/// Class Body:
+SkeletonAnimation spineSkeleton;
+
+/// Start():
+spineSkeleton = GetComponent<SkeletonAnimation>();
+
+/* play animation */
+spineSkeleton.AnimationState.SetAnimation(0, "walk", false); // trackID, animationName, loop
+spineSkeleton.AnimationState.TimeScale = 1.0f;
+
+// OR 
+spineSkeleton.AnimationName = "";     // clear animation & rewind
+spineSkeleton.AnimationName = "walk"; // set new animation
+spineSkeleton.timeScale     = 1.0f;   // play
+
+/* stop animation */
+string currentAnimation = spineSkeleton.AnimationName;
+spineSkeleton.AnimationState.ClearTrack(0);
+spineSkeleton.AnimationState.SetAnimation(0, currentAnimation, false);
+spineSkeleton.AnimationState.TimeScale = 0.0f;
+// OR 
+string currentAnimation     = spineSkeleton.AnimationName; // keep previous animation
+spineSkeleton.AnimationName = "";                          // clear animation & rewind
+spineSkeleton.AnimationName = currentAnimation;            // restore previous animation
+spineSkeleton.timeScale     = 0.0f;                        // stop
+
+/* pause animation */
+spineSkeleton.AnimationState.TimeScale = 0.0f;
+// OR 
+spineSkeleton.timeScale = 0.0f;
+
+/* resume animation */
+spineSkeleton.AnimationState.TimeScale = 1.0f;
+// OR 
+spineSkeleton.timeScale = 1.0f;
+
+
+/* -----------------------------------------
+   Animation info
+----------------------------------------- */
+/// Class Body:
+SkeletonAnimation spineSkeleton;
+
+/// Start():
+spineSkeleton = GetComponent<SkeletonAnimation>();
+
+// get animation duration
+float duration = spineSkeleton.Skeleton.Data.FindAnimation("walk").duration;
+
+
+/* -----------------------------------------
+   Execute Spine Events
+----------------------------------------- */
+/// Class Body:
+SkeletonAnimation spineSkeleton;
+
+/// Start():
+spineSkeleton = GetComponent<SkeletonAnimation>();
+
+// first assign the event
+spineSkeleton.AnimationState.Event += OnSpineEvent; 
+
+/// Class Body:
+
+// next check for the event
+void OnSpineEvent(TrackEntry trackEntry, Spine.Event e) {
+    
+    // check for Events labelled "sound" in Spine
+    if (e.Data.Name == "sound") {
+        Debug.Log("Sound event from Spine");
+    }
+
+}
+
+
+/* -----------------------------------------
+   Swap Skin
+----------------------------------------- */
+/// Class Body:
+SkeletonAnimation spineSkeleton;
+
+/// Start():
+spineSkeleton = GetComponent<SkeletonAnimation>();
+
+spineSkeleton.Skeleton.SetSkin("newSkin");
 
