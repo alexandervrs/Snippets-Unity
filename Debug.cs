@@ -38,6 +38,53 @@ MeshRenderer renderer = target as MeshRenderer; // ...
 
 
 /* -----------------------------------------
+   Retrieve FPS
+----------------------------------------- */
+/*
+
+	note: Save the following as a script named DebugFPS & attach it to a GameObject to display FPS on screen
+
+*/
+
+// -------------( DebugFPS.cs )--------------
+
+using UnityEngine;
+
+public class DebugFPS : MonoBehaviour {
+
+	private string fps   = "";
+	private float  delta = 0.0f;
+	private float  msec  = 0.0f;
+
+	void Update()
+	{
+		delta  += (Time.unscaledDeltaTime - delta) * 0.1f;
+		msec   = Time.unscaledDeltaTime * 1000f;
+		fps    = Mathf.Round(1.0f / delta).ToString()+" fps, "+Mathf.Round(msec).ToString()+" msec";
+	}
+
+	void OnGUI() {
+
+		GUIStyle style = new GUIStyle();
+		Color    color = new Color();
+
+     	ColorUtility.TryParseHtmlString("#db397f", out color);
+		style.normal.textColor = color;
+
+		Rect rect = new Rect(0, 0, Screen.width-6, Screen.height-6 * 2 / 100);
+		style.alignment = TextAnchor.UpperLeft;
+		style.fontSize  = Screen.height * 2 / 100;
+
+		GUI.Label(rect, fps, style);
+		
+	}
+
+}
+
+// -------------( DebugFPSDisplay.cs )--------------
+
+
+/* -----------------------------------------
    Draw Rectangle Bounds
 ----------------------------------------- */
 /// Class Body:
