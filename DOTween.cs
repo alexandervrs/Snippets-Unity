@@ -8,7 +8,8 @@
 
 /* using */
 using DG.Tweening;
-using TMPro; // for TextMeshPro only
+using TMPro;       // for TextMeshPro only
+using Spine.Unity; // for SkeletonRenderer only
 
 
 /* 
@@ -98,6 +99,7 @@ gameObject.transform.DOPath(pathPoints.ToArray(), 2.0f, PathType.CatmullRom, Pat
 /* -----------------------------------------
    Tween Value
 ----------------------------------------- */
+
 // tween custom value, 1f is start value, 0f is end value, 3f is duration
 float valueToChange = 1f;
 Tween tweenID = DOTween.To(() => 1f, x => valueToChange = x, 0f, 3f).SetEase(Ease.OutSine);
@@ -160,6 +162,19 @@ gameObject.transform.GetComponent<TextMeshPro>().DOOutlineColor(Color.red, 1.5f)
 
 // animate alpha
 gameObject.transform.GetComponent<TextMeshPro>().DOFade(0.0f, 1.5f);
+
+
+/* --------------------------------------------
+   Tween Skeleton Color/Alpha (Spine)
+-------------------------------------------- */
+float targetValue  = 0.0f;
+float currentAlpha = 1.0f;
+DOTween.To(() => 0.0f, x => currentAlpha = x, targetValue, 1.0f).SetEase(Ease.OutQuint).OnUpdate(() => {
+	
+	gameObject.GetComponent<SkeletonRenderer>().skeleton.SetColor(new Color(1, 1, 1, currentAlpha));
+
+});
+
 
 /* -----------------------------------------
    Tween Playback Control

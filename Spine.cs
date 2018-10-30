@@ -8,7 +8,7 @@
 
 /* using */
 using Spine; // for TrackEntry, AnimationState, Event
-using Spine.Unity; // for SkeletonAnimation
+using Spine.Unity; // for SkeletonAnimation, SkeletonRenderer
 
 
 /* -----------------------------------------
@@ -32,7 +32,7 @@ using Spine.Unity; // for SkeletonAnimation
 SkeletonAnimation spineSkeleton;
 
 /// Start():
-spineSkeleton = GetComponent<SkeletonAnimation>();
+spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
 
 /// Start(), Update():
 spineSkeleton.AnimationName = "run"; // set to animation name
@@ -49,7 +49,7 @@ spineSkeleton.initialFlipY  = false; // whether to flip Y
 SkeletonAnimation spineSkeleton;
 
 /// Start():
-spineSkeleton = GetComponent<SkeletonAnimation>();
+spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
 
 /* play animation */
 spineSkeleton.AnimationState.SetAnimation(0, "walk", false); // trackID, animationName, loop
@@ -89,7 +89,7 @@ spineSkeleton.timeScale = 1.0f;
 SkeletonAnimation spineSkeleton;
 
 /// Start():
-spineSkeleton = GetComponent<SkeletonAnimation>();
+spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
 
 // get animation duration
 float duration = spineSkeleton.Skeleton.Data.FindAnimation("walk").duration;
@@ -102,7 +102,7 @@ float duration = spineSkeleton.Skeleton.Data.FindAnimation("walk").duration;
 SkeletonAnimation spineSkeleton;
 
 /// Start():
-spineSkeleton = GetComponent<SkeletonAnimation>();
+spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
 
 // first assign the event
 spineSkeleton.AnimationState.Event += OnSpineEvent; 
@@ -127,7 +127,14 @@ void OnSpineEvent(TrackEntry trackEntry, Spine.Event e) {
 SkeletonAnimation spineSkeleton;
 
 /// Start():
-spineSkeleton = GetComponent<SkeletonAnimation>();
+spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
 
 spineSkeleton.Skeleton.SetSkin("newSkin");
+
+
+/* -----------------------------------------
+   Fade Skin
+----------------------------------------- */
+/// Start(), Update():
+gameObject.GetComponent<SkeletonRenderer>().skeleton.SetColor( new Color(1.0f, 1.0f, 1.0f, 0.5f) ); // r,g,b,a
 
