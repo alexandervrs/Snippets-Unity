@@ -146,8 +146,8 @@ gameObject.transform.GetComponent<TextMeshPro>().DOText("10000", 1.5f, true, Scr
 
 // animate numeric value
 float targetValue      = 10000f;
-float currentTextValue = 0.0f;
-DOTween.To(() => 0.0f, x => currentTextValue = x, targetValue, 2.0f).SetEase(Ease.OutQuint).OnUpdate(() => {
+float currentTextValue = 0.0f; // also initial value, you may also do DOTween.To(() => 1400f ... to provide a custom initial value
+DOTween.To(() => currentTextValue, x => currentTextValue = x, targetValue, 2.0f).SetEase(Ease.OutQuint).OnUpdate(() => { // 2.0f is tween duration
 
 	// round number and update text value on each frame
 	gameObject.transform.GetComponent<TextMeshPro>().SetText(Mathf.Ceil(currentTextValue).ToString());
@@ -168,8 +168,8 @@ gameObject.transform.GetComponent<TextMeshPro>().DOFade(0.0f, 1.5f);
    Tween Skeleton Color/Alpha (Spine)
 -------------------------------------------- */
 float targetValue  = 0.0f;
-float currentAlpha = 1.0f;
-DOTween.To(() => 0.0f, x => currentAlpha = x, targetValue, 1.0f).SetEase(Ease.OutQuint).OnUpdate(() => {
+float currentAlpha = 1.0f; // also initial value, you may also do DOTween.To(() => 1400f ... to provide a custom initial value
+DOTween.To(() => currentAlpha, x => currentAlpha = x, targetValue, 1.0f).SetEase(Ease.OutQuint).OnUpdate(() => { // 1.0f is tween duration
 	
 	gameObject.GetComponent<SkeletonRenderer>().skeleton.SetColor(new Color(1, 1, 1, currentAlpha));
 
