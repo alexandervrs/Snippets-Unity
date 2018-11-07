@@ -66,7 +66,7 @@ Shader "VisualFX/Sprite/Grayscale"
             "CanUseSpriteAtlas" = "True"
         }
 
-        ZWrite Off Blend SrcAlpha OneMinusSrcAlpha Cull Off
+        ZWrite Off Blend One OneMinusSrcAlpha Cull Off
 
         Pass
         {

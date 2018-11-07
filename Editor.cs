@@ -393,7 +393,7 @@ public class SampleWindowEditor : EditorWindow
 
 
 /* -----------------------------------------
-   Editor Preferences
+   Editor Preferences Storage
 ----------------------------------------- */
 /* store a setting in the Editor Preferences Database */
 
@@ -408,6 +408,56 @@ EditorPrefs.DeleteKey("testing");
 
 // clears ALL Editor preference keys (use with caution!)
 EditorPrefs.DeleteAll();
+
+
+/* -----------------------------------------
+   Editor Preferences Item
+----------------------------------------- */
+
+// adds a custom section & interface in the Unity Preferences section (Edit > Preferences)
+
+// -------------( SamplePreferencesSection.cs )--------------
+
+using UnityEngine;
+using UnityEditor;
+
+public class SamplePreferencesSection : MonoBehaviour
+{
+    private static bool preferencesExist = false;
+
+    // preference variables
+    public static bool   optionVar1 = false;
+    public static string optionVar2 = "";
+    public static int    optionVar3 = 0;
+
+	// add the section in Preferences
+    [PreferenceItem("My Preferences Title")]
+    public static void MyPreferencesTitle()
+    {
+        // default values if not loaded
+        if (!preferencesExist) {
+            optionVar1 = EditorPrefs.GetBool("optionVar1", false);
+            optionVar2 = EditorPrefs.GetString("optionVar2", "");
+            optionVar3 = EditorPrefs.GetInt("optionVar2", 0);
+            preferencesExist = true;
+        }
+
+        // preferences user interface
+        optionVar1 = EditorGUILayout.Toggle("Option 1", optionVar1);
+        optionVar2 = EditorGUILayout.TextField("Option 2", optionVar2);
+        optionVar3 = EditorGUILayout.IntSlider("Option 3", optionVar3, 0, 100);
+
+        // save user changes
+        if (GUI.changed) {
+            EditorPrefs.SetBool("optionVar1", optionVar1);
+            EditorPrefs.SetString("optionVar2", optionVar2);
+            EditorPrefs.SetInt("optionVar3", optionVar3);
+        }
+    }
+}
+
+
+// -------------( SamplePreferencesSection.cs )--------------
 
 
 /* -----------------------------------------
