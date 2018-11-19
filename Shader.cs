@@ -171,6 +171,10 @@ rend.material.SetTexture("_MainTex", tex);
 Material grayscaleFilterMaterial;
 Material blurFilterMaterial;
 
+// filter amounts
+float grayscaleFilterAmount = 1.0f;
+float blurFilterAmount = 3.0f;
+
 // uniform IDs
 int uniformFXAmount;
 
@@ -180,7 +184,7 @@ grayscaleFilterMaterial = new Material( Shader.Find("VisualFX/PostProcess/Graysc
 blurFilterMaterial      = new Material( Shader.Find("VisualFX/PostProcess/Blur") );
 
 // store the Shader uniforms as IDs
-int uniformFXAmount = Shader.PropertyToID("_FXAmount");
+uniformFXAmount = Shader.PropertyToID("_FXAmount");
 
 /// OnRenderImage():
 void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -193,11 +197,11 @@ void OnRenderImage(RenderTexture source, RenderTexture destination)
 	RenderTexture temp2 = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
 
     // first shader pass, using Graphics.Blit() to copy the contents of source rendertexture to temp rendertexture after applying grayscaleFilterMaterial
-    grayscaleFilterMaterial.SetFloat(uniformFXAmount, grayscaleFilter);
+    grayscaleFilterMaterial.SetFloat(uniformFXAmount, grayscaleFilterAmount);
 	Graphics.Blit(source, temp, grayscaleFilterMaterial);
 
     // second shader pass, using Graphics.Blit() to copy the contents of temp rendertexture to temp2 rendertexture after applying blurFilterMaterial
-    blurFilterMaterial.SetFloat(uniformFXAmount, blurFilter);
+    blurFilterMaterial.SetFloat(uniformFXAmount, blurFilterAmount);
 	Graphics.Blit(temp, temp2, blurFilterMaterial);
 
     // more shader passes can go here (needs extra temp RenderTextures) ...
