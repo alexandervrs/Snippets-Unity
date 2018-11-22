@@ -483,8 +483,30 @@ if (testAsset !=null && AssetDatabase.Contains(testAsset)) {
 	AssetDatabase.MoveAssetToTrash( AssetDatabase.GetAssetPath( testAsset ) );
 }
 
+
+/* -----------------------------------------
+   Project Scene Assets
+----------------------------------------- */
+
+// retrieve the currently active scene in the Editor
+Scene activeScene = SceneManager.GetActiveScene();
+
 // save current Scene
 EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+
+// loads a different initial scene everytime you test run the game, e.g. a "Setup.unity" scene under {ProjectFolder}/Assets/Scenes/
+SceneAsset startupScene = AssetDatabase.LoadAssetAtPath<SceneAsset>("Assets/Scenes/Setup.unity");
+EditorSceneManager.playModeStartScene = startupScene;
+
+// open a scene in the Editor and set it as active
+Scene openScene = EditorSceneManager.OpenScene("Assets/Scenes/Level1.unity");
+EditorSceneManager.SetActiveScene(openScene);
+
+// close a scene in the Editor, e.g. current scene
+EditorSceneManager.CloseScene(EditorSceneManager.GetActiveScene(), true); // true is a flag to remove the scene after closing
+
+// retrieve a scene by its name
+Scene findScene = EditorSceneManager.GetSceneByName("Level1");
 
 
 /* -----------------------------------------
