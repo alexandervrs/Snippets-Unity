@@ -59,25 +59,36 @@ request.SendWebRequest().completed += (asyncResult) => {
    Download file from server
 ----------------------------------------- */
 
+/// IEnumerator Start():
+
 // request the remote file using GET method
 UnityWebRequest request = UnityWebRequest.Get("http://httpbin.org/gzip");
 
-request.SendWebRequest().completed += (asyncResult) => {
+AsyncOperation asyncLoad = request.SendWebRequest();
 
-	if (request.isDone && !request.isNetworkError && !request.isHttpError) {
-		
-		// success, save the file data on disk
-		using (BinaryWriter binaryWriter = new BinaryWriter(File.Open(Application.persistentDataPath+"/downloadedData.zip", FileMode.Create))) {
-			binaryWriter.Write(request.downloadHandler.data);
-		}
-		
-		Debug.Log("File Downloaded successfully in: "+Application.persistentDataPath+"/downloadedData.zip");
-		
-	} else {
-		// error ...
-		Debug.Log("Error downloading file: "+request.error);
+if (asyncLoad == null) { 
+	yield break;
+}
+
+while (!asyncLoad.isDone) {
+
+	// query asyncLoad.progress here for progress (0.0f to 1.0f)
+	Debug.Log("Downloading... "+Mathf.Ceil(asyncLoad.progress*100)+"%");
+	yield return null;
+
+}
+
+if (!request.isNetworkError && !request.isHttpError) {
+
+	// success, save the file data on disk
+	using (BinaryWriter binaryWriter = new BinaryWriter(File.Open(Application.persistentDataPath+"/downloadedData.zip", FileMode.Create))) {
+		binaryWriter.Write(request.downloadHandler.data);
 	}
+	
+	Debug.Log("File Downloaded successfully in: "+Application.persistentDataPath+"/downloadedData.zip");
 
-};
-
+} else {
+	// error ...
+	Debug.Log("Error downloading file: "+request.error);
+}
 
