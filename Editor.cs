@@ -423,7 +423,6 @@ using UnityEditor;
 
 public class SamplePreferencesSection : MonoBehaviour
 {
-    private static bool preferencesExist = false;
 
     // preference variables
     public static bool   optionVar1 = false;
@@ -434,13 +433,11 @@ public class SamplePreferencesSection : MonoBehaviour
     [PreferenceItem("My Preferences Title")]
     public static void MyPreferencesTitle()
     {
-        // default values if not loaded
-        if (!preferencesExist) {
-            optionVar1 = EditorPrefs.GetBool("optionVar1", false);
-            optionVar2 = EditorPrefs.GetString("optionVar2", "");
-            optionVar3 = EditorPrefs.GetInt("optionVar2", 0);
-            preferencesExist = true;
-        }
+		
+        // load stored preferences from EditorPrefs entries
+        optionVar1 = EditorPrefs.GetBool("optionVar1", false); // "false" is default value
+        optionVar2 = EditorPrefs.GetString("optionVar2", "");
+        optionVar3 = EditorPrefs.GetInt("optionVar2", 0);
 
         // preferences user interface
         optionVar1 = EditorGUILayout.Toggle("Option 1", optionVar1);
@@ -449,10 +446,12 @@ public class SamplePreferencesSection : MonoBehaviour
 
         // save user changes
         if (GUI.changed) {
-            EditorPrefs.SetBool("optionVar1", optionVar1);
+            // save stored preferences to EditorPrefs entries
+			EditorPrefs.SetBool("optionVar1", optionVar1);
             EditorPrefs.SetString("optionVar2", optionVar2);
             EditorPrefs.SetInt("optionVar3", optionVar3);
         }
+		
     }
 }
 

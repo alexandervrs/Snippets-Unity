@@ -48,7 +48,7 @@ gameObject.transform.position = new Vector3(
 	gameObject.transform.position.z
 );
 
-// set rotation
+// set rotation (or localRotation for local axis rotation)
 gameObject.transform.rotation = Quaternion.Euler(
 	gameObject.transform.rotation.x-90.0f, 
 	gameObject.transform.rotation.y, 
@@ -71,6 +71,19 @@ gameObject.transform.GetComponent<Renderer>().material.color = new Vector4(1.0f,
 ----------------------------------------- */
 // center current gameobject to main camera
 gameObject.transform.position = Camera.main.ScreenToWorldPoint( new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane) );
+
+
+/* -----------------------------------------
+   Rotate Object locally around its pivot
+----------------------------------------- */
+/// Class Body:
+Vector3 rotateBy;
+
+/// Start():
+rotateBy = new Vector3(0, 4, 0); // rotate by X axis (in 2D view)
+
+/// Update():
+transform.localRotation *= Quaternion.Euler(rotateBy.x, rotateBy.y, rotateBy.z);
 
 
 /* -----------------------------------------
