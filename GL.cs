@@ -11,24 +11,30 @@ using UnityEngine;
 /* -----------------------------------------
    Draw a Color Quad
 ----------------------------------------- */
+/// Class Body:
+Material quadMaterial;
+
+/// Start():
+//create a new material using the default Sprite shader
+quadMaterial = new Material(Shader.Find("Sprites/Default"));
+
 /// OnRenderObject(), OnPostRender():
-void OnRenderObject()
-{
+GL.PushMatrix();
+GL.LoadOrtho();
 
-    GL.PushMatrix();
-    GL.LoadOrtho();
+// set a material for the quad
+quadMaterial.SetPass(0);
 
-    //material.SetPass(0); set a material
+// draw a quad over whole screen
+GL.Begin(GL.QUADS);
+GL.Color(new Color32( 100, 149, 237, 255 ));
+GL.Vertex3(0, 0, 0);
+GL.Vertex3(1, 0, 0);
+GL.Vertex3(1, 1, 0);
+GL.Vertex3(0, 1, 0);
+GL.End();
 
-    // draw a quad over whole screen
-    GL.Begin(GL.QUADS);
-    GL.Color(new Color32( 100, 149, 237, 255 ));
-    GL.Vertex3(0, 0, 0);
-    GL.Vertex3(1, 0, 0);
-    GL.Vertex3(1, 1, 0);
-    GL.Vertex3(0, 1, 0);
-    GL.End();
+GL.PopMatrix();
 
-    GL.PopMatrix();
-
-}
+/// OnDestroy():
+Destroy(quadMaterial); // destroy the material when object is destroyed
