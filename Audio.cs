@@ -64,6 +64,29 @@ soundSource.Play();
 
 
 /* -----------------------------------------
+   Play Sound Loop After Intro
+----------------------------------------- */
+/// Class Body:
+public AudioClip soundIntro;
+public AudioClip soundLoop;
+
+private AudioSource soundIntroSource;
+private AudioSource soundLoopSource;
+
+/// Start(), Update():
+AudioSource soundIntroSource = gameObject.AddComponent<AudioSource>();
+AudioSource soundLoopSource  = gameObject.AddComponent<AudioSource>();
+
+soundIntroSource.clip = soundIntro;
+
+soundLoopSource.clip  = soundLoop;
+soundLoopSource.loop  = true;
+
+soundIntroSource.Play(); // play intro sound first once
+soundLoopSource.PlayDelayed(soundIntroSource.clip.length); // when intro sound completes, play the loop part
+
+
+/* -----------------------------------------
    Play Sound with Filters
 ----------------------------------------- */
 /// Class Body:
