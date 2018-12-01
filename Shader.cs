@@ -138,21 +138,109 @@ Shader "VisualFX/Sprite/Grayscale"
 
 
 /* -----------------------------------------
-   Change Material Shader on runtime
+   GrabPass Shader Effect
 ----------------------------------------- */
 
-// note: remember to destroy the material copy
+// note: A GrabPass shader can be set as a Material on a Sprite or Quad (GameObject > 3D Object > Quad)
 
-// find the shader of a material
-Renderer rend = GetComponent<Renderer>(); // or SpriteRenderer for sprites
-rend.material.shader = Shader.Find("VisualFX/Sprite/Grayscale");
+// first create the Shader, e.g. GrabPassGrayscale.shader
 
-// set Uniform value (Float)
-rend.material.SetFloat("_FXAmount", 1.0f);
+// -------------( GrabPassGrayscale.shader )--------------
+Shader "VisualFX/GrabPass/Grayscale"
+{ 
+	// exposed properties
+    Properties
+    {
+        _MainTex("Sprite Texture", 2D) = "white" {}  // optional: allow SpriteRenderer texture
+        _Alpha("Alpha", Range (0, 1)) = 1.0
+        _FXAmount("FXAmount", Range (0, 1)) = 1.0
+    }
 
-// set main texture Sampler
-Texture2D tex;
-rend.material.SetTexture("_MainTex", tex);
+    SubShader
+    {
+        Tags {
+            "Queue" = "Transparent"
+            "IgnoreProjector" = "true"
+            "RenderType" = "Opaque"
+            "PreviewType" = "Plane"
+        }
+
+        ZWrite Off Blend SrcAlpha OneMinusSrcAlpha Cull Off
+
+        // do a GrabPass and store the data in _GrabTexture
+        GrabPass { "_GrabTexture"  } 
+
+        Pass
+        {
+
+            CGPROGRAM
+            
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma fragmentoption ARB_precision_hint_fastest
+            #include "UnityCG.cginc"
+
+            struct appdata_t
+            {
+                float4 vertex   : POSITION;
+                float4 color    : COLOR;
+                float2 texcoord : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 texcoord : TEXCOORD0;
+                float2 screencoord : TEXCOORD1;
+                float4 vertex   : SV_POSITION;
+                float4 color    : COLOR;
+            };
+
+			// uniforms
+            uniform float _FXAmount;
+            sampler2D _GrabTexture;
+            sampler2D _MainTex;
+			
+            float _Alpha;
+
+			// vertex shader
+            v2f vert(appdata_t IN)
+            {
+                v2f OUT;
+                OUT.vertex = UnityObjectToClipPos(IN.vertex);
+                float4 screenpos = ComputeGrabScreenPos(OUT.vertex); // grab pass screen position
+                OUT.screencoord = screenpos.xy / screenpos.w;
+                OUT.texcoord = IN.texcoord; // optional: allow SpriteRenderer texture
+                OUT.color = IN.color;
+                return OUT;
+            }
+
+			// fragment shader
+            float4 frag (v2f i) : COLOR
+            {
+                float4 c2 = tex2D(_MainTex, i.texcoord)*i.color;  // optional: allow SpriteRenderer texture
+                
+                float4 c = tex2D(_GrabTexture, i.screencoord)*i.color;
+                c.rgb = lerp(c.rgb, dot(c.rgb, float3(0.3, 0.59, 0.11)), _FXAmount);
+                // c.a = c.a*_Alpha;
+                c.a = c2.a*_Alpha; // optional: allow SpriteRenderer texture alpha
+                return float4(c.rgb, c.a);
+            }
+
+            ENDCG
+
+        }
+
+    }
+
+    Fallback "Sprites/Default"
+
+}
+// -------------( GrabPassGrayscale.shader )--------------
+
+// then attach Shader a Material, find shader under VisualFX > GrabPass > Grayscale
+// Shader exposes the Main texture (optional for smooth effects), Alpha and FXAmount to control the effect
+// Set material to GameObject in order to apply the effect, either in Editor or runtime
+// GrabPass shaders affect the region that your Sprite or Quad occupies and are applied to anything under it (via Sorting Layer / Z order)
 
 
 /* -----------------------------------------
@@ -233,6 +321,24 @@ shaderMaterial.SetInt("_UniformName", 1);
 
 // set Uniform value (Vector)
 shaderMaterial.SetVector("_UniformName", new Vector4(0.4f, 0.4f, 0.4f, 0.4f));
+
+
+/* -----------------------------------------
+   Change Material Shader on runtime
+----------------------------------------- */
+
+// note: remember to destroy the material copy
+
+// find the shader of a material
+Renderer rend = GetComponent<Renderer>(); // or SpriteRenderer for sprites
+rend.material.shader = Shader.Find("VisualFX/Sprite/Grayscale");
+
+// set Uniform value (Float)
+rend.material.SetFloat("_FXAmount", 1.0f);
+
+// set main texture Sampler
+Texture2D tex;
+rend.material.SetTexture("_MainTex", tex);
 
 
 /* -----------------------------------------
