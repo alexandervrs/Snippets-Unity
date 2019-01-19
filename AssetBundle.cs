@@ -26,6 +26,7 @@ using System.IO; // for Path
 /* -----------------------------------------
    Load files from AssetBundle
 ----------------------------------------- */ 
+/// IEnumerator Start():
 IEnumerator Start()
 {
 
@@ -158,7 +159,74 @@ IEnumerator Start()
 
     textComponent.font = fnt;
     /* */
+	
+}
 
+/* -----------------------------------------
+   Load all files from AssetBundle
+----------------------------------------- */ 
+/// Class Body:
+private int totalAssets;  // total assets to load, make public to be able to reference it (for e.g. loading progress)
+private int loadedAssets; // currently loaded asset count, make public to be able to reference it (for e.g. loading progress)
+private Dictionary<string, AudioClip> sounds = new Dictionary<string, AudioClip>(); // a database of the sounds loaded from the asset pack
+
+/// IEnumerator Start():
+IEnumerator Start()
+{
+	
+	/* case: extract audio files and create AudioClips out of them */
+	AssetBundleCreateRequest audioPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/stage1sounds"));
+	
+	if (audioPackResult == null) { 
+		yield break;
+	}
+	
+	while (!audioPackResult.isDone) {
+		
+		// query audioPackResult.progress here for the load progress of the asset bundle ...
+		yield return null;
+		
+	}
+
+	// asset bundle loading done ...
+	
+	audioPack = audioPackResult.assetBundle as AssetBundle;
+
+	// get number of files in assetbundle by quering the length of the string array returned by GetAllAssetNames()
+	totalAssets = audioPack.GetAllAssetNames().Length;
+	
+	// run through all files in assetbundle and load them as AudioClips
+	foreach (string currentAsset in audioPack.GetAllAssetNames()) {
+		
+		AssetBundleRequest request = audioPack.LoadAssetAsync<AudioClip>(currentAsset);
+		
+		while (!request.isDone) {
+			
+			// query request.progress here for the load progress of the asset bundle and request.asset.name to get the currently loading asset name...
+			yield return null;
+			
+		}
+		
+		// create a new AudioClip from loaded sound asset
+		AudioClip audioClip = (AudioClip)request.asset;
+		
+		Debug.Log(GetType()+": Loaded asset "+request.asset.name);
+
+		if (audioClip == null) {
+			// could not load asset ...
+		} else {
+			// successful loading of asset, increment loadedAssets
+			loadedAssets += 1;
+		}
+
+		// add the loaded asset by its name and AudioClip reference for later use (for playback, freeing resource from memory etc.)
+		sounds.Add(Path.GetFileNameWithoutExtension(currentAsset), audioClip);
+		
+	}
+	
+	// loading all assets complete, you can compare loadedAssets vs totalAssets and have an isLoaded flag in order to proceed with the game or take other action ...
+	
+	
 }
 
 
