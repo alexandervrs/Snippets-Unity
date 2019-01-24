@@ -92,12 +92,15 @@ Cursor.visible = false;
 /* -----------------------------------------
    Retrieve Special folders
 ----------------------------------------- */
-// get the game's Appdata folder
+// get the game's Appdata folder, suitable for persistent data (savegames, cache files, user config)
 string localStorageDirectory = Application.persistentDataPath + Path.DirectorySeparatorChar;
 
-// get the game's Asset folder
-string assetDirectory = Application.dataPath + Path.DirectorySeparatorChar;
+// get the game's Assets folder, requires assets to be inside a "StreamingAssets" root folder in the project Assets
+// which will be copied over to the target's filesystem
+string assetDirectory = Application.streamingAssetsPath + Path.DirectorySeparatorChar;
 
+// get the game's Data folder (not suitable to load files from in some platforms (e.g. Android/iOS), use StreamingAssets there)
+string dataDirectory = Application.dataPath + Path.DirectorySeparatorChar;
 
 
 /* -----------------------------------------
