@@ -90,39 +90,6 @@ Cursor.visible = false;
 
 
 /* -----------------------------------------
-   Enable Exlusive Audio (Android & iOS)
------------------------------------------ */
-// mutes all background audio when app is active
-// note: requires READ_PHONE_STATE permission
-#if UNITY_ANDROID || UNITY_IOS
-PlayerSettings.muteOtherAudioSources = true;
-#endif
-
-
-/* -----------------------------------------
-   Hide OS Statusbar (iOS Only)
------------------------------------------ */
-#if UNITY_IOS
-PlayerSettings.statusBarHidden = true;
-#endif
-
-
-/* --------------------------------------------------
-   Disable Screen Rotation Animation (Android & iOS)
--------------------------------------------------- */
-#if UNITY_ANDROID || UNITY_IOS
-PlayerSettings.useAnimatedAutorotation = false;
-#endif
-
-
-
-/* -----------------------------------------
-   Allow in Background
------------------------------------------ */
-PlayerSettings.visibleInBackground = true;
-
-
-/* -----------------------------------------
    Retrieve Special folders
 ----------------------------------------- */
 // get the game's Appdata folder

@@ -521,6 +521,25 @@ EditorApplication.ExecuteMenuItem("Edit/Project Settings/Player");
 
 
 /* -----------------------------------------
+   Player Settings (Editor)
+----------------------------------------- */
+
+// enable exlusive audio (Android & iOS)
+// mutes all background audio when app is active
+// note: requires READ_PHONE_STATE permission
+PlayerSettings.muteOtherAudioSources = true;
+
+// hide OS Statusbar (iOS Only)
+PlayerSettings.statusBarHidden = true;
+
+// disable Screen Rotation Animation (Android & iOS)
+PlayerSettings.useAnimatedAutorotation = false;
+
+// allow application in background
+PlayerSettings.visibleInBackground = true;
+
+
+/* -----------------------------------------
    Game Playback
 ----------------------------------------- */
 
