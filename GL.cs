@@ -9,32 +9,52 @@ using UnityEngine;
 
 
 /* -----------------------------------------
-   Draw a Color Quad
+   Draw a Quad
 ----------------------------------------- */
 /// Class Body:
-Material quadMaterial;
+Material drawMaterial;
 
 /// Start():
-//create a new material using the default Sprite shader
-quadMaterial = new Material(Shader.Find("Sprites/Default"));
+//create and set a new material using the default unlit Sprite shader
+drawMaterial = new Material(Shader.Find("Sprites/Default"));
+drawMaterial.SetPass(0); // activate the shader pass for rendering
 
-/// OnRenderObject(), OnPostRender():
-GL.PushMatrix();
-GL.LoadOrtho();
+/// OnRenderObject(), OnRenderImage(), OnPostRender():
+// size of quad (normalized to 0-1 for on Screen drawing, actual world coordinates when using localToWorldMatrix)
+float x = 0f;
+float y = 0f;
+float width  = 1f;
+float height = 1f;
 
-// set a material for the quad
-quadMaterial.SetPass(0);
+// draw setup
+GL.PushMatrix(); // saves both projection and modelview matrices to the matrix stack
 
-// draw a quad over whole screen
-GL.Begin(GL.QUADS);
-GL.Color(new Color32( 100, 149, 237, 255 ));
-GL.Vertex3(0, 0, 0);
-GL.Vertex3(1, 0, 0);
-GL.Vertex3(1, 1, 0);
-GL.Vertex3(0, 1, 0);
+GL.MultMatrix(transform.localToWorldMatrix); // draw on game's world
+//GL.LoadOrtho(); // draw on screen
+
+// draw begin
+GL.Begin(GL.QUADS); // draw quad fill
+//GL.Begin(GL.TRIANGLE_STRIP); // draw quad outline
+
+GL.Color(Color.yellow); // set quad color
+
+// draw quad vertices with Y axis flipped
+GL.Vertex(new Vector3(x, 1-y));
+GL.Vertex(new Vector3(x + width, 1-y));
+
+GL.Vertex(new Vector3(x + width, 1-y));
+GL.Vertex(new Vector3(x + width, 1-y - height));
+
+GL.Vertex(new Vector3(x + width, 1-y - height));
+GL.Vertex(new Vector3(x, 1-y - height));
+
+GL.Vertex(new Vector3(x, 1-y - height));
+GL.Vertex(new Vector3(x, 1-y));
+
+// draw end
 GL.End();
-
-GL.PopMatrix();
+GL.PopMatrix(); // restores both projection and modelview matrices off the top of the matrix stack
 
 /// OnDestroy():
-Destroy(quadMaterial); // destroy the material when object is destroyed
+Destroy(drawMaterial); // destroy the material when object is destroyed
+
