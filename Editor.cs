@@ -25,19 +25,22 @@ using System.Reflection; // for Application, MethodInfo, BindingFlags only
    Inspector Custom Editor
 ----------------------------------------- */
 
-// -------------( MyCustomEditor.cs )--------------
+// -------------( SampleCustomEditor.cs )--------------
 
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(MyComponent))]
-public class MyCustomEditor : Editor
+// note: change MyComponent to an existing Component type e.g. SpriteRenderer or custom Script (e.g. SampleCustomComponent)
+
+[CustomEditor(typeof(SampleCustomComponent))]
+public class SampleCustomEditor : Editor
 {
 	
 	public override void OnInspectorGUI()
     {
 
-		MyComponent targetComponent = (MyComponent)target;
+		// set the component target that the additional GUI elements will appear to
+		SampleCustomComponent targetComponent = (SampleCustomComponent)target;
 		
 		// draws the default Inspector items
 		DrawDefaultInspector();
@@ -51,10 +54,10 @@ public class MyCustomEditor : Editor
 
 }
 
-// -------------( MyCustomEditor.cs )--------------
+// -------------( SampleCustomEditor.cs )--------------
 
 // target the specific Component Inspector
-MyComponent targetComponent = (MyComponent)target;
+SampleCustomComponent targetComponent = (SampleCustomComponent)target;
 
 // draws all the current Inspector items taken from the Component
 DrawDefaultInspector();
@@ -326,6 +329,42 @@ private int myLayer = 0;
 /// OnInspectorGUI():
 myLayer = EditorGUILayout.LayerField("Layer", myLayer);
 
+/* ----- (DROPZONE) create an Asset Dropzone ----- */
+Event thisEvent = Event.current;
+Rect  dropZone  = GUILayoutUtility.GetRect(0.0f, 80.0f, GUILayout.ExpandWidth(true));
+EditorGUILayout.Space();
+GUI.Box(dropZone, "", GUI.skin.textField);
+GUIStyle guiLabelCentered  = new GUIStyle("label");
+guiLabelCentered.alignment = TextAnchor.MiddleCenter;
+GUI.Label(dropZone, "Drop Assets Here", guiLabelCentered);
+EditorGUILayout.Space();
+
+switch (thisEvent.type) {
+
+	case EventType.DragUpdated:
+	case EventType.DragPerform:
+
+	if (!dropZone.Contains(thisEvent.mousePosition)) {
+		return;
+	}
+		
+	DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+	
+	if (thisEvent.type == EventType.DragPerform) {
+
+		DragAndDrop.AcceptDrag();
+		
+		foreach (Object droppedObject in DragAndDrop.objectReferences) {
+
+			Debug.Log("onDrop: Dropped Asset -> "+droppedObject.name);
+			// handle dropped assets here ...
+		}
+
+	}
+
+	break;
+}
+
 
 /* --------------------------------------------
    Manipulate Inspector Custom UI Controls
@@ -416,12 +455,12 @@ EditorPrefs.DeleteAll();
 
 // adds a custom section & interface in the Unity Preferences section (Edit > Preferences)
 
-// -------------( SamplePreferencesSection.cs )--------------
+// -------------( SamplePreferencesEditor.cs )--------------
 
 using UnityEngine;
 using UnityEditor;
 
-public class SamplePreferencesSection : MonoBehaviour
+public class SamplePreferencesEditor : MonoBehaviour
 {
 
     // preference variables
@@ -437,7 +476,7 @@ public class SamplePreferencesSection : MonoBehaviour
         // load stored preferences from EditorPrefs entries
         optionVar1 = EditorPrefs.GetBool("optionVar1", false); // "false" is default value
         optionVar2 = EditorPrefs.GetString("optionVar2", "");
-        optionVar3 = EditorPrefs.GetInt("optionVar2", 0);
+        optionVar3 = EditorPrefs.GetInt("optionVar3", 0);
 
         // preferences user interface
         optionVar1 = EditorGUILayout.Toggle("Option 1", optionVar1);
@@ -456,7 +495,7 @@ public class SamplePreferencesSection : MonoBehaviour
 }
 
 
-// -------------( SamplePreferencesSection.cs )--------------
+// -------------( SamplePreferencesEditor.cs )--------------
 
 
 /* -----------------------------------------
@@ -841,9 +880,10 @@ if (!string.IsNullOrEmpty(path)) {
 	Material mat = new Material( Shader.Find(shaderName) );
 	if (!AssetDatabase.Contains(mat)) {
 		AssetDatabase.CreateAsset( mat, materialName );
-		Debug.Log("Imported Shader \""+name+"\" to: "+assetPath+". Material already exists");
-	} else {
 		Debug.Log("Imported Shader \""+name+"\" to: "+assetPath+" and created Material for it");
+	} else {
+		
+		Debug.Log("Imported Shader \""+name+"\" to: "+assetPath+". Material already exists");
 	}
 
 	AssetDatabase.Refresh();
