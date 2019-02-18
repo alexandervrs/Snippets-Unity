@@ -31,8 +31,8 @@ using UnityEngine;
 	10. To the top left of the panel there should be a dropdown with all the assigned animations in the state machine
 	11. Choose an animation and then click on "Add Property", animate/change the property you wish
 	
-	note: Dragging and dropping a series of images in Unity will create a Sprite animation that you can use for these states
-		  and change their frame timing as you wish from the Animation window
+	note: Dragging and dropping a series of images in Unity "Scene" tab will create a Sprite animation that you can use for these
+		  states and change their frame timing as you wish from the Animation window
 	
 */
 
