@@ -102,12 +102,13 @@ gameObject.transform.DOPath(pathPoints.ToArray(), 2.0f, PathType.CatmullRom, Pat
 
 // tween custom value, 1f is start value, 0f is end value, 3f is duration
 float valueToChange = 1f;
-Tween tweenID = DOTween.To(() => 1f, x => valueToChange = x, 0f, 3f).SetEase(Ease.OutSine);
+Tweener tweenID = DOTween.To(() => 1f, x => valueToChange = x, 0f, 3f).SetEase(Ease.OutSine);
 
 
 /* -----------------------------------------
    Loop Tween
 ----------------------------------------- */
+
 Tweener thisTween = gameObject.transform.DOMove(new Vector3(
 	gameObject.transform.position.x, 
 	gameObject.transform.position.y+5f,
@@ -126,15 +127,37 @@ gameObject.moveTween = thisTween;
    Tween Sequence
 ----------------------------------------- */
 
-// play sequence
-Sequence timeline = DOTween.Sequence();
+/* 
+	note:  Tweens inside InsertCallback() do not automatically cleanup & need to be done manually
+		   You may keep the Tweeners in a list and iterate to kill the tweens e.g.
 
-timeline.InsertCallback(2, () => {  // callback
-	// Sequence Callback at 2s ..." 
+			/// Class Body:
+			private List<Tweener>  tweeners  = new List<Tweener>();
+
+			/// OnDestroy():
+			foreach (Tweener thisTweener in tweeners) {
+				thisTweener.Kill();
+			}
+
+			tweeners.Clear();
+			tweeners = null;
+
+*/
+
+// create sequence
+Sequence sequence = DOTween.Sequence();
+
+// insert a tween in a keyframe, Insert only accepts DOTween Tweeners
+// note: tweens inside Insert() are managed by the Sequence and cleanup automatically
+sequence.Insert(3, gameObject.transform.DOScale(0.4f, 0.3f).SetEase(Ease.InBack) );
+
+// insert a callback in a keyframe, can be any kind of code/action
+sequence.InsertCallback(2.3f, () => { 
+	// Sequence Callback at 2.3s ..." 
 });
-timeline.Insert(3, gameObject.transform.DOScale(0.4f, 0.3f).SetEase(Ease.InBack) ); // inline expression
-timeline.SetLoops(-1); // loop endlessly
-timeline.Play();
+
+sequence.SetLoops(-1); // loop endlessly
+sequence.Play(); // play the entire sequence
 
 
 /* -----------------------------------------
@@ -165,8 +188,31 @@ gameObject.transform.GetComponent<TextMeshPro>().DOFade(0.0f, 1.5f);
 
 
 /* --------------------------------------------
+   Tween Shader Property
+-------------------------------------------- */
+
+/// Class Body:
+Shader   grayscaleShader;
+Material grayscaleMaterial;
+
+/// Start():
+grayscaleShader   = Shader.Find("VisualFX/PostProcess/Grayscale");
+grayscaleMaterial = new Material( grayscaleShader );
+
+/// Start(), Update():
+float targetValue  = 1.0f;
+float currentValue = 0.0f; // also initial value, you may also do DOTween.To(() => 1400f ... to provide a custom initial value
+DOTween.To(() => currentValue, x => currentValue = x, targetValue, 2.0f).SetEase(Ease.OutSine).OnUpdate(() => { // 2.0f is tween duration
+	
+	grayscaleMaterial.SetFloat("_FXAmount", currentValue);
+
+});
+
+
+/* --------------------------------------------
    Tween Skeleton Color/Alpha (Spine)
 -------------------------------------------- */
+
 float targetValue  = 0.0f;
 float currentAlpha = 1.0f; // also initial value, you may also do DOTween.To(() => 1400f ... to provide a custom initial value
 DOTween.To(() => currentAlpha, x => currentAlpha = x, targetValue, 1.0f).SetEase(Ease.OutQuint).OnUpdate(() => { // 1.0f is tween duration
@@ -180,7 +226,7 @@ DOTween.To(() => currentAlpha, x => currentAlpha = x, targetValue, 1.0f).SetEase
    Tween Playback Control
 ----------------------------------------- */
 
-Tween    tween = // ... DOTween 
+Tweener  tween = // ... DOTween 
 Sequence tween = // ... or Sequence 
 
 // add a delay before starting tween/sequence

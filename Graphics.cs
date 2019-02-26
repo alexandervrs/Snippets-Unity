@@ -1,7 +1,7 @@
 
 /**
- * GL.cs
- * Low level Graphics Library related snippets for Unity
+ * Graphics.cs
+ * Graphics & Low level Graphics Library (GL) related snippets for Unity
  */
 
 /* using */
@@ -57,4 +57,23 @@ GL.PopMatrix(); // restores both projection and modelview matrices off the top o
 
 /// OnDestroy():
 Destroy(drawMaterial); // destroy the material when object is destroyed
+
+
+/* -----------------------------------------
+   Draw Mesh standalone
+----------------------------------------- */
+/// Class Body:
+Mesh     mesh;
+Material material;
+
+/// OnRenderObject(), OnRenderImage(), OnPostRender():
+Vector3    position = Vector3.zero;
+Quaternion rotation = Quaternion.identity;
+Vector3    scale    = new Vector3(6f, -6f, 6f);
+
+// create 4x4 (translation, rotation, scale) transformation matrix
+Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, scale);
+
+material.SetPass(0); // set the pass of the assigned material
+Graphics.DrawMeshNow(mesh, matrix, 0); // draw the mesh, with assigned transformation matrix and material index pass 0 (like above)
 
