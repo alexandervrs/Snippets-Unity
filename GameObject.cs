@@ -43,7 +43,18 @@ newObj.transform.SetParent(gameObject.transform, true);
 /* get handle of current GameObject that is executing the script */
 GameObject obj = gameObject;
 
-/* find first GameObject by name */
+/* find first Child GameObject by name in the current GameObject's transform/hierarchy */
+GameObject obj = gameObject.transform.Find("Test").gameObject;
+
+/* find first Child GameObject by index in the current GameObject's transform/hierarchy */
+GameObject obj = gameObject.transform.GetChild(0).gameObject;
+
+/* find all Child GameObjects under the current GameObject's transform/hierarchy */
+for (int i = 0; i < gameObject.transform.childCount - 1; i++) {
+	Debug.Log(gameObject.transform.GetChild(i).transform.name);
+}
+
+/* find any first GameObject by name */
 GameObject obj = GameObject.Find("Test");
 
 /* find all GameObjects by name (slow) */
@@ -165,6 +176,27 @@ GameObject.DontDestroyOnLoad(gameObject);
 // get the GameObject's name
 string objName = gameObject.name;
 
+// get the GameObject's transform (position, rotation, scale etc.)
+Transform transform = gameObject.transform;
+
+// get the GameObject's position (x,y,z) in World Space
+Vector3 position = gameObject.transform.position;
+
+// get the GameObject's rotation (rotationX,rotationY,rotationZ) in World Space
+Quaternion rotation = gameObject.transform.rotation;
+
+// get the GameObject's position (x,y,z), relative to the parent GameObject transform/hierarchy
+Vector3 localPosition = gameObject.transform.localPosition;
+
+// get the GameObject's scale (scaleX,scaleY,scaleZ), relative to the parent GameObject transform/hierarchy
+Vector3 localScale = gameObject.transform.localScale;
+
+// get the GameObject's position (rotationX,rotationY,rotationZ), relative to the parent GameObject transform/hierarchy
+Quaternion localRotation = gameObject.transform.localRotation;
+
+// get the GameObject's rotation (rotationX,rotationY,rotationZ) in degrees, relative to the parent GameObject transform/hierarchy
+Vector3 rotationEulerAngles = gameObject.transform.localEulerAngles;
+
 // get the GameObject's tag
 string objTag = gameObject.tag;
 
@@ -177,6 +209,12 @@ gameObject.layer = LayerMask.NameToLayer("Water");
 
 // return the Scene the GameObject belongs to
 Scene objScene = gameObject.scene;
+
+// get the GameObject's children GameObjects
+int children = gameObject.transform.childCount;
+
+// get the GameObject's parent transform
+Transform parent = gameObject.transform.parent;
 
 // set GameObject to be active or inactive in scene, execute events, be accessible from other objects etc.
 gameObject.SetActive(true);
