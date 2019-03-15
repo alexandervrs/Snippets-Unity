@@ -7,6 +7,7 @@
 /* using */
 using UnityEngine;
 using UnityEngine.SceneManagement; // only for gameObject.scene
+using System; // only for StringComparison
 
 
 /* -----------------------------------------
@@ -175,6 +176,13 @@ GameObject.DontDestroyOnLoad(gameObject);
 ----------------------------------------- */
 // get the GameObject's name
 string objName = gameObject.name;
+
+// get the GameObject's name (without the (Clone) part)
+string objName = gameObject.name;
+int clonePartIndex = gameObject.name.IndexOf(" (Clone)", StringComparison.Ordinal);
+if (clonePartIndex != -1) {
+    objName = gameObject.name.Substring(0, clonePartIndex);
+}
 
 // get the GameObject's transform (position, rotation, scale etc.)
 Transform transform = gameObject.transform;
