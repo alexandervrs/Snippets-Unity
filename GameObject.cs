@@ -51,7 +51,7 @@ GameObject obj = gameObject.transform.Find("Test").gameObject;
 GameObject obj = gameObject.transform.GetChild(0).gameObject;
 
 /* find all Child GameObjects under the current GameObject's transform/hierarchy */
-for (int i = 0; i < gameObject.transform.childCount - 1; i++) {
+for (int i = 0; i < gameObject.transform.childCount; i++) {
 	Debug.Log(gameObject.transform.GetChild(i).transform.name);
 }
 
