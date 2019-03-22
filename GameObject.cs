@@ -55,6 +55,14 @@ for (int i = 0; i < gameObject.transform.childCount; i++) {
 	Debug.Log(gameObject.transform.GetChild(i).transform.name);
 }
 
+/* find all root GameObjects, only those "parented" to the Scene */
+List<GameObject> rootObjects = new List<GameObject>();
+Scene scene = SceneManager.GetActiveScene();
+scene.GetRootGameObjects(rootObjects);
+foreach (GameObject thisGameObject in rootObjects) {
+    Debug.Log(thisGameObject.name);
+}
+
 /* find any first GameObject by name */
 GameObject obj = GameObject.Find("Test");
 

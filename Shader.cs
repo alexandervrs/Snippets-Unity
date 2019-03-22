@@ -165,10 +165,10 @@ Shader "VisualFX/GrabPass/Grayscale"
             "PreviewType" = "Plane"
         }
 
-        ZWrite Off Blend SrcAlpha OneMinusSrcAlpha Cull Off
+		// no ZWrite, Cull or Blend setup ...
 
         // do a GrabPass and store the data in _GrabTexture
-        GrabPass { "_GrabTexture"  } 
+        GrabPass { "_GrabTexture" } 
 
         Pass
         {
@@ -362,3 +362,18 @@ if (!shaderGrayscalePost.isSupported) {
 // fully load all shaders to prevent future performance hiccups
 Shader.WarmupAllShaders();
 
+
+/* -----------------------------------------
+   Use Checkbox for uniform in Inspector
+----------------------------------------- */
+/// Properties:
+[Toggle(OPTION_COLORIZE_B)] _InvertAlpha ("Colorize Blue", Float) = 0
+
+/// Pass:
+#pragma multi_compile __ OPTION_COLORIZE_B
+
+/// frag():
+#ifdef OPTION_COLORIZE_B
+c.rgb = c.rgb*float3(0, 2, 2);
+/// ...
+#endif
