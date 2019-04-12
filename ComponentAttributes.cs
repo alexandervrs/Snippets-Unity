@@ -6,7 +6,7 @@
 
 /* using */
 using UnityEngine;
-using System; // for Serializable
+using UnityEngine.Serialization; // for FormerlySerializedAs
 
 
 /* -----------------------------------------
@@ -90,7 +90,7 @@ public Vector4 someCoords4;
 string[] sampleArray = new string[5];
 
 // adds a Dictionary list
-[Serializable]
+[System.Serializable]
 public class MyDictionaryModel
 {
     public string name;
@@ -99,3 +99,6 @@ public class MyDictionaryModel
 [SerializeField]
 private List<MyDictionaryModel> sampleDictionary;
 
+// rename a field without losing its serialized value
+[FormerlySerializedAs("myValue")]
+public string name;

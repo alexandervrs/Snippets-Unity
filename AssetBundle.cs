@@ -7,6 +7,7 @@
 /* using */
 using UnityEngine;
 using UnityEngine.U2D; // for SpriteAtlas
+using UnityEngine.Networking; // for UnityWebRequest
 using System.IO; // for Path
 
 
@@ -19,6 +20,12 @@ using System.IO; // for Path
 	1. Choose AssetBundle name at the bottom of the Inspector for each asset
 	2. Compile AssetBundle for the target Platform using AssetBundle Browser or Editor script
 	3. Load assets from bundle and use them
+	
+	notes: 
+		1. Different platforms need a different AssetBundle type compiled from AssetBundle Browser
+		2. WebGL needs a WebRequest in order to work (see section "Load AssetBundle (WebGL)")
+		3. AssetBundles cannot contain Scripts but they can contain Prefabs/GameObjects with 
+		   script component references as long as the Script used by the component exists in the main application
 	
 */
 
@@ -33,8 +40,8 @@ IEnumerator Start()
     /* case: extract and use audioclip */
     AudioSource audioSource = gameObject.AddComponent<AudioSource>();
     
-	// load content from an assetBundle file residing in "Resources" folder, named "commonaudio"
-    AssetBundleCreateRequest audioPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commonaudio"));
+	// load content from an assetBundle file residing in "Assets/AssetBundles" folder, named "commonaudio"
+    AssetBundleCreateRequest audioPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/commonaudio"));
 
     yield return new WaitWhile(() => audioPackResult.isDone == false);
 
@@ -55,8 +62,8 @@ IEnumerator Start()
     /* case: extract and use Sprite */
     SpriteRenderer sprRenderer = gameObject.AddComponent<SpriteRenderer>();
     
-	// load content from an assetBundle file residing in "Resources" folder, named "commontextures"
-    AssetBundleCreateRequest texturesPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commontextures"));
+	// load content from an assetBundle file residing in "Assets/AssetBundles" folder, named "commontextures"
+    AssetBundleCreateRequest texturesPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/commontextures"));
 
     yield return new WaitWhile(() => texturesPackResult.isDone == false);
 
@@ -76,8 +83,8 @@ IEnumerator Start()
     /* case: extract and use Texture2D as sprite */
     SpriteRenderer sprRenderer = gameObject.AddComponent<SpriteRenderer>();
  	
-	// load content from an assetBundle file residing in "Resources" folder, named "commontextures"   
-    AssetBundleCreateRequest texturesPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commontextures"));
+	// load content from an assetBundle file residing in "Assets/AssetBundles" folder, named "commontextures"   
+    AssetBundleCreateRequest texturesPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/commontextures"));
 
     yield return new WaitWhile(() => texturesPackResult.isDone == false);
 
@@ -98,7 +105,7 @@ IEnumerator Start()
     /* case: extract and use a sprite from a SpriteAtlas */
     SpriteRenderer sprRenderer = gameObject.AddComponent<SpriteRenderer>();
     
-    AssetBundleCreateRequest texturesPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commontextures"));
+    AssetBundleCreateRequest texturesPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/commontextures"));
 
     yield return new WaitWhile(() => texturesPackResult.isDone == false);
 
@@ -118,7 +125,7 @@ IEnumerator Start()
 
 
     /* case: extract and read Text content */
-    AssetBundleCreateRequest textdataResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commondata"));
+    AssetBundleCreateRequest textdataResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/commondata"));
 
     yield return new WaitWhile(() => textdataResult.isDone == false);
 
@@ -143,8 +150,8 @@ IEnumerator Start()
 	/* case: extract and use Font */
     Text textComponent = gameObject.AddComponent<Text>();  // Text requires a Canvas to display and is using UnityEngine.UI (See UI.cs for better example)
     
-	// load content from an assetBundle file residing in "Resources" folder, named "commonfonts"
-    AssetBundleCreateRequest fontPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/commonfonts"));
+	// load content from an assetBundle file residing in "Assets/AssetBundles" folder, named "commonfonts"
+    AssetBundleCreateRequest fontPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/commonfonts"));
 
     yield return new WaitWhile(() => fontPackResult.isDone == false);
 
@@ -175,7 +182,7 @@ IEnumerator Start()
 {
 	
 	/* case: extract audio files and create AudioClips out of them */
-	AssetBundleCreateRequest audioPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.dataPath, "Resources/Windows/stage1sounds"));
+	AssetBundleCreateRequest audioPackResult = AssetBundle.LoadFromFileAsync(Path.Combine(Application.streamingAssetsPath, "AssetBundles/Windows/stage1sounds"));
 	
 	if (audioPackResult == null) { 
 		yield break;
@@ -231,12 +238,48 @@ IEnumerator Start()
 
 
 /* -----------------------------------------
+   Load AssetBundle (WebGL)
+----------------------------------------- */ 
+// note: WebGL can only load AssetBundles this way
+
+/// Start(), Awake():
+using (UnityWebRequest webRequest = UnityWebRequestAssetBundle.GetAssetBundle(Application.streamingAssetsPath+"AssetBundles/WebGL/packedgameobjects"))
+{
+	yield return webRequest.SendWebRequest();
+
+	if (webRequest.isNetworkError || webRequest.isHttpError)
+	{
+		Debug.Log("WebRequest Error");
+	} else {
+
+		AssetBundle assetBundle = DownloadHandlerAssetBundle.GetContent(webRequest);
+		
+		GameObject  packedGameObject = assetBundle.LoadAsset<GameObject>("TestObject");
+
+		if (packedGameObject == null) { 
+			Debug.Log("Error Loading Asset");
+		}
+
+		GameObject newObj = GameObject.Instantiate(packedGameObject, Vector3.zero, Quaternion.identity);
+		
+		// get MyCustomScript component from loaded Asset Bundle
+		MyCustomScript scriptInBundle = newObj.GetComponent<MyCustomScript>();
+		
+		// test value from component in prefab
+		Debug.Log("Value in GameObject from AssetBundle is: "+scriptInBundle.test.ToString());
+		
+	}
+}
+
+
+/* -----------------------------------------
    Create AssetBundle (Editor)
 ----------------------------------------- */ 
 
 // note: place script in "Editor" folder
 //       also add more menu items for other platforms
 //       Different Asset Bundles need to be generated for each target platform
+//       Alternatively you can use the Asset Bundle Browser
 
 [MenuItem("Tools/Assets/Build Asset Bundle/Windows")]
 static void BuildAssetBundlesWin()

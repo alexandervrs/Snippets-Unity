@@ -548,6 +548,21 @@ Scene findScene = EditorSceneManager.GetSceneByName("Level1");
 
 
 /* -----------------------------------------
+   Components
+----------------------------------------- */
+// copy component values
+ComponentUtility.CopyComponent(targetComponent); 
+
+// paste component values
+ComponentUtility.PasteComponentValues(targetComponent);
+
+// duplicate component
+System.Type type = original.GetType(); // original is Component
+Component copy   = destination.AddComponent(type);  // destination is of type GameObject
+EditorUtility.CopySerialized(original, copy);
+
+
+/* -----------------------------------------
    Project Settings
 ----------------------------------------- */
 
