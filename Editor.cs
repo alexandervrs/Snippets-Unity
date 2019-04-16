@@ -137,14 +137,14 @@ if (GUILayout.Button(Resources.Load<Texture2D>("myIcon"), GUI.skin.button, GUILa
 /// Class Body:
 private string stringResult = "";
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 stringResult = GUILayout.TextField(stringResult, 32); // 32 is max Characters
 
 /* ----- (TEXTFIELD) add a Label & Textfield to the Inspector ----- */
 /// Class Body:
 private string stringResult = "";
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 // reset the fields to look like Inspector
 EditorGUIUtility.labelWidth = 0;
 EditorGUIUtility.fieldWidth = 0;
@@ -162,7 +162,7 @@ stringResult = EditorGUILayout.TextField(new GUIContent("Label Text", Resources.
 private int myNumberInt = 5;
 private float myNumberFloat = 5.4;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 myNumberInt = EditorGUILayout.IntField("Label Text", myNumberInt);
 myNumberFloat = EditorGUILayout.FloatField("Label Text", myNumberFloat);
 
@@ -170,21 +170,21 @@ myNumberFloat = EditorGUILayout.FloatField("Label Text", myNumberFloat);
 /// Class Body:
 private string stringResult = "";
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 stringResult = GUILayout.TextArea(stringResult, 256, GUILayout.Height(96)); // 256 is max Characters
 
 /* ----- (PASSWORD) add a masked Password field to the Inspector ----- */
 /// Class Body:
 private string stringResult = "";
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 stringResult = GUILayout.PasswordField(stringResult, "*"[0], 32); // "*"[0] is char "*", 32 is max Characters
 
 /* ----- (CHECKBOX) add a Checkbox to the Inspector ----- */
 /// Class Body:
 private bool toggleResult = false;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 toggleResult = EditorGUILayout.Toggle("Test", toggleResult);
 
 /* ----- (CHECKBOX) add a Checkbox Group to the Inspector ----- */
@@ -194,7 +194,7 @@ private bool toggleResult1 = false;
 private bool toggleResult2 = false;
 private bool toggleResult3 = false;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 toggleGroupResult = EditorGUILayout.BeginToggleGroup("Label Text", toggleGroupResult);
 EditorGUILayout.Toggle("Test1", toggleResult1);
 EditorGUILayout.Toggle("Test2", toggleResult2);
@@ -206,14 +206,14 @@ EditorGUILayout.EndToggleGroup();
 private int selectedIndex = 1;
 string[] text = new string[] { "option1", "option2", "option3", "option4" };
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 selectedIndex = GUILayout.SelectionGrid(selectedIndex, text, 1, EditorStyles.radioButton); // 1 is how many controls to fit in one line
 
 /* ----- (COLOR) add a Colorpicker to the Inspector ----- */
 /// Class Body:
 private Color myColor = Color.white;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 myColor = EditorGUILayout.ColorField("Color", myColor);
 
 /* ----- (SLIDER) add a Slider to the Inspector ----- */
@@ -221,7 +221,7 @@ myColor = EditorGUILayout.ColorField("Color", myColor);
 private int sliderResultInt = 0;
 private float sliderResultFloat = 0.0f;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 sliderResultInt = EditorGUILayout.IntSlider("Test", sliderResultInt, 0, 10); // int slider
 sliderResultFloat = EditorGUILayout.Slider("Test", sliderResultFloat, 0f, 10f); // float slider
 
@@ -230,11 +230,11 @@ sliderResultFloat = EditorGUILayout.Slider("Test", sliderResultFloat, 0f, 10f); 
 private float sliderMin = 0;
 private float sliderMax = 0;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 EditorGUILayout.MinMaxSlider(ref sliderMin, ref sliderMax, 0, 100);
 
 /* ----- (IMAGE) add an Image to the Inspector from a "Resources" folder, expanded 100% & resizable ----- */
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 Texture2D image = Resources.Load<Texture2D>("myImage");
 if (image) {
 	
@@ -253,7 +253,7 @@ if (image) {
 /// Class Body:
 private int myToolBarSelectedItem = 0;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 Texture[] buttonImages = new Texture[3]; // will also create 3 Toolbar Buttons
 buttonImages[0] = Resources.Load<Texture2D>("myIcon");
 buttonImages[1] = Resources.Load<Texture2D>("myIcon");
@@ -283,7 +283,7 @@ switch(myToolBar) {
 int selectedIndex = 0;
 string[] choices = new string[]{ "One", "Two", "Three" };
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 selectedIndex = EditorGUILayout.Popup("Label Text", selectedIndex, choices, EditorStyles.popup);
 
 /* ----- (DROPDOWN) add an Enum Dropdown menu ----- */
@@ -296,14 +296,14 @@ public enum MyChoices
 }
 public MyChoices selectedIndex;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 selectedIndex = (MyChoices)EditorGUILayout.EnumPopup("Label Text", selectedIndex, EditorStyles.popup);
 
 /* ----- (FOLDOUT) add a Foldout (Accordion) ----- */
 /// Class Body:
 private bool myFoldoutState = false;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 myFoldoutState = EditorGUILayout.Foldout(myFoldoutState, "More");
 if (myFoldoutState) {
 	
@@ -312,21 +312,21 @@ if (myFoldoutState) {
 }
 
 /* ----- (HELPBOX) add a Help Box (Message) ----- */
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 EditorGUILayout.HelpBox("Some Warning message", MessageType.Warning);
 
 /* ----- (CURVE) show an Animation Curve graph ----- */
 /// Class Body:
 private AnimationCurve myCurve = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 myCurve = EditorGUILayout.CurveField("Curve", myCurve);
 
 /* ----- (LAYER) show a Layer dropdown ----- */
 /// Class Body:
 private int myLayer = 0;
 
-/// OnInspectorGUI():
+/// OnInspectorGUI(), OnGUI():
 myLayer = EditorGUILayout.LayerField("Layer", myLayer);
 
 /* ----- (DROPZONE) create an Asset Dropzone ----- */
@@ -365,6 +365,32 @@ switch (thisEvent.type) {
 	break;
 }
 
+/* ----- (RECTANGLE) draw a rectangle ----- */
+/// OnInspectorGUI(), OnGUI():
+Rect rect = EditorGUILayout.GetControlRect(GUILayout.Height(EditorGUIUtility.singleLineHeight));
+EditorGUI.DrawRect(new Rect(0, rect.y, Screen.width, rect.height), new Color32(0x42, 0x80, 0xe4, 0xff)); // use rect.x & rect.width instead to apply Inspector margins
+
+
+/* --------------------------------------------
+   Asset Preview
+-------------------------------------------- */
+// create an asset preview thumbnail
+Rect rect = EditorGUILayout.GetControlRect(GUILayout.Height(EditorGUIUtility.singleLineHeight));
+
+Texture2D icon = AssetPreview.GetAssetPreview(prefab); // supply prefab as a GameObject
+Rect iconRect = new Rect(rect.x, rect.y, rect.height, rect.height);
+
+if (icon != null) {
+	GUI.DrawTexture(iconRect, icon, ScaleMode.ScaleToFit, true, 1f, Color.white, Vector4.zero, Vector4.one * 4f);
+} else {
+	EditorGUI.DrawRect(iconRect, EditorStyles.label.normal.textColor * 0.25f);
+}
+
+// repaint Editor Window if asset preview is still loading
+if (AssetPreview.IsLoadingAssetPreviews()) {
+	this.Repaint(); // "this" is EditorWindow
+}
+
 
 /* --------------------------------------------
    Manipulate Inspector Custom UI Controls
@@ -398,6 +424,11 @@ public class SampleWindowEditor : EditorWindow
 		
         window.position     = new Rect(6, 100, 320, 200);    // initial window position
 		window.titleContent = new GUIContent("Test Window"); // window title
+
+		// set window icon (optional)
+		Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Gizmos/SampleWindowEditor Icon.png"); // load window icon
+		window.titleContent = new GUIContent("Test Window", icon); // window title & icon
+
 		// handle resizing, same sizes for min and max size will disable resizing of the window
 		window.minSize = new Vector2(320, 200);
         window.maxSize = new Vector2(320, 200);
@@ -429,6 +460,47 @@ public class SampleWindowEditor : EditorWindow
 }
 
 // -------------( SampleWindowEditor.cs )--------------
+
+
+/* -----------------------------------------
+   Scriptable Objects
+----------------------------------------- */
+
+// creates a scriptable object / custom asset
+
+// -------------( SampleScriptableAsset.cs )--------------
+
+/* note: if there's a "SampleScriptableAsset Icon" texture in "Assets/Gizmos" folder, this script will use it for the file icon */
+
+using UnityEngine;
+
+// accessible via Create > New Scriptable Asset
+[CreateAssetMenu(fileName = "Assets/NewScriptableAsset", menuName = "New Scriptable Asset", order = int.MaxValue)]
+public class PrefabSwatchAsset : ScriptableObject
+{
+
+	// asset contents
+
+    [System.Serializable]
+    public struct SomeClass {
+        string name;
+        [Range(0, 1)]
+        float value;
+    }
+
+    [SerializeField]
+    public SomeClass customClass;
+
+    public GameObject[] somePrefabCollection = new GameObject[3];
+
+    public string someText = "test";
+
+    [Range(0, 1000)]
+    public float someNumber = 3;
+
+}
+
+// -------------( SampleScriptableAsset.cs )--------------
 
 
 /* -----------------------------------------
@@ -519,6 +591,18 @@ Object testAsset = (Object)AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetP
 if (testAsset !=null && AssetDatabase.Contains(testAsset)) {
 	Debug.Log("Removing asset "+testAsset.name);
 	AssetDatabase.MoveAssetToTrash( AssetDatabase.GetAssetPath( testAsset ) );
+}
+
+// retrieve assets of type by their GUID
+foreach (string guid in AssetDatabase.FindAssets("t:Sprite")) {
+
+	string path = AssetDatabase.GUIDToAssetPath(guid);
+	Sprite spr = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+	if (spr != null) {
+		Debug.Log(spr.name);
+		// work with loaded assets, add to list etc ...
+	}
+
 }
 
 

@@ -180,3 +180,29 @@ void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	// scene is loaded, do stuff ...
 }
 
+
+/* -----------------------------------------
+    Editor-only Events
+----------------------------------------- */
+
+// called when the GUI is being rendered (usually for EditorWindow)
+void OnGUI()
+{
+	Debug.Log("OnGUI");
+}
+
+// called when the inspector GUI is being rendered (usually for Inspector)
+void override OnInspectorGUI() {
+	Debug.Log("OnInspectorGUI");	
+}
+
+// called when user selection on the Unity Editor has changed
+void OnSelectionChange() {
+	Debug.Log("OnSelectionChange");
+}
+
+// called from the Scene window
+// usually for mesh editing or displaying gizmos in the Scene window
+void OnSceneGUI(SceneView view) {
+	Debug.Log("OnSceneGUI: "+view);
+}
