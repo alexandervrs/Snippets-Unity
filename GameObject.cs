@@ -15,7 +15,8 @@ using System; // only for StringComparison
 ----------------------------------------- */
 GameObject prefab; // supply a prefab
 
-GameObject newObj = GameObject.Instantiate(prefab, new Vector3(
+GameObject newObj = GameObject.Instantiate(prefab, 
+new Vector3(
 	gameObject.transform.position.x, 
 	gameObject.transform.position.y, 
 	gameObject.transform.position.z
@@ -23,16 +24,31 @@ GameObject newObj = GameObject.Instantiate(prefab, new Vector3(
 ) as GameObject;
 
 // (optional) set the sprite's draw order (if it has a SpriteRenderer component)
-SpriteRenderer sprite   = newObj.GetComponent<SpriteRenderer>();
-sprite.sortingLayerID   = SortingLayer.NameToID("Enemies"); // sorting layer name
-sprite.sortingOrder     = 0;                                // order in that sorting layer
+SpriteRenderer spriteRenderer   = newObj.GetComponent<SpriteRenderer>();
+sprite.sortingLayerID           = SortingLayer.NameToID("Enemies"); // sorting layer name
+sprite.sortingOrder             = 0;                                // order in that sorting layer
+
+
+/* -----------------------------------------
+   Create new GameObject
+----------------------------------------- */
+GameObject emptyGameObject = new GameObject("Player");
+emptyGameObject.AddComponent<SpriteRenderer>();
+
+GameObject newObj = GameObject.Instantiate(emptyGameObject, 
+new Vector3(
+	0, // X
+	0, // Y
+	0  // Z
+	), Quaternion.identity
+);
 
 
 /* -----------------------------------------
    Create Empty GameObject
 ----------------------------------------- */
-GameObject newObj = new GameObject();
-newObj.name = "Test Object";
+GameObject newObj = new GameObject("Test Object");
+newObj.name = "Test Object"; // OR use .name
 
 // parent the new empty gameobject to current gameObject's transform
 newObj.transform.SetParent(gameObject.transform, true);
@@ -260,3 +276,22 @@ if (component == null) {
 	// Component doesn't exist on this GameObject ...
 }
 
+// get all components of a type on a GameObject
+SpriteRenderer[] components = gameObject.GetComponents<SpriteRenderer>();
+
+foreach (SpriteRenderer thisComponent in components) {
+
+	thisComponent.color = new Color(1, 1, 1, 0.3f);
+	// ...
+
+}
+
+// get all components of a type on a GameObject and its children
+SpriteRenderer[] components = gameObject.GetComponentsInChildren<SpriteRenderer>();
+
+foreach (SpriteRenderer thisComponent in components) {
+
+	thisComponent.color = new Color(1, 1, 1, 0.3f);
+	// ...
+
+}

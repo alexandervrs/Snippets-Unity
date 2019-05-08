@@ -3,6 +3,7 @@
  * DOTween.cs
  * DOTween related snippets for Unity
  *
+ * https://github.com/Demigiant/dotween
  * https://assetstore.unity.com/packages/tools/visual-scripting/dotween-pro-32416
  */
 
@@ -131,10 +132,18 @@ gameObject.moveTween = thisTween;
 	note:  Tweens inside InsertCallback() do not automatically cleanup & need to be done manually
 		   You may keep the Tweeners in a list and iterate to kill the tweens e.g.
 
+		   It's also good practice to kill the sequence as well in case the object gets destroyed unexpectedly
+
 			/// Class Body:
+			private Sequence       sequence;
 			private List<Tweener>  tweeners  = new List<Tweener>();
 
 			/// OnDestroy():
+			if (sequence) {
+				sequence.Kill();
+				sequence = null;
+			}
+
 			foreach (Tweener thisTweener in tweeners) {
 				thisTweener.Kill();
 			}
@@ -232,7 +241,7 @@ Sequence tween = // ... or Sequence
 // add a delay before starting tween/sequence
 tween.SetDelay(1.0f);
 
-// plays the tween/sequence
+// plays/resumes the tween/sequence
 tween.Play();
 
 // pauses the tween/sequence
@@ -259,6 +268,24 @@ tween.Rewind();
 // rewinds the tween/sequence, pauses it and includes any delay with SetDelay()
 tween.Rewind(true);
 
+// set ID to manipulate single tween or mass manipulate tweeners 
+tween.SetId("MyID");
+
+// play/resume all tweens with that ID
+DOTween.Play("MyID");
+
+// pause all tweens with that ID
+DOTween.Pause("MyID");
+
+// stops all tweens with that ID
+DOTween.Kill("MyID");
+
+// check if Tweener/Sequence is playing, you may also check e.g. DOTween.IsTweening(transform.DOMoveY(2f, 1.2f))
+DOTween.IsTweening(tween);
+
+// kill all tweens, and return how many were killed
+int killed = DOTween.KillAll();
+
 
 /* -----------------------------------------
    Tween Effects
@@ -270,3 +297,27 @@ gameObject.transform.DOShakePosition(2.0f, 0.2f, 110, 90, false, true);
 // animate rubber scale effect
 gameObject.transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 2.5f, 10, 1).SetEase(Ease.OutElastic);
 
+
+/* -----------------------------------------
+   Global Settings
+----------------------------------------- */
+
+// enable safe mode, cleans up tweens and checks first if object/component exists
+DOTween.useSafeMode = true;
+
+// change the tweener & sequence capacity so DOTween doesn't need to adjust that every time the max is exceeded
+DOTween.SetTweensCapacity(200, 50);
+
+
+/* -----------------------------------------
+   Get Info
+----------------------------------------- */
+
+// returns the total number of active/playing tweens
+int activeTweens = DOTween.TotalPlayingTweens();
+
+// return a list of all the playing tweens
+int playingTweens = DOTween.PlayingTweens();
+
+// return a list of all the paused tweens
+int pausedTweens = DOTween.PausedTweens();
