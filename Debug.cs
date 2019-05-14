@@ -27,6 +27,21 @@ Debug.LogWarning("Warning!");
 // write a console error
 Debug.LogError("Error!");
 
+// write a formatted console message (also works with Debug.LogWarningFormat(), Debug.LogErrorFormat())
+Debug.LogFormat("Data Path is: <color=#f4f400>{0}</color>", Application.dataPath);
+
+
+/* -----------------------------------------
+   Logger Functionality
+----------------------------------------- */
+// disable all Debug logging (can make the game run faster)
+ILogger logger = Debug.unityLogger;
+logger.logEnabled = false;
+
+// filter out to show only specific debug messages
+ILogger logger = Debug.unityLogger;
+logger.filterLogType = LogType.Error; // only show Errors
+
 
 /* -----------------------------------------
    Compiler Warnings

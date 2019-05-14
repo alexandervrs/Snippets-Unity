@@ -98,6 +98,17 @@ gameObject.transform.DOPath(pathPoints.ToArray(), 2.0f, PathType.CatmullRom, Pat
 
 
 /* -----------------------------------------
+   Tween Camera
+----------------------------------------- */
+
+// zoom in Orthographic camera to orthographic size: 3
+gameObject.GetComponent<Camera>().DOOrthoSize(3, 0.7f).SetEase(Ease.InOutSine);
+
+// zoom in Perspective camera to fieldOfView: 4
+gameObject.GetComponent<Camera>().DOFieldOfView(4, 0.7f).SetEase(Ease.InOutSine);
+
+
+/* -----------------------------------------
    Tween Value
 ----------------------------------------- */
 
