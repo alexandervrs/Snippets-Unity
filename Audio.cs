@@ -6,6 +6,7 @@
 
 /* using */
 using UnityEngine;
+using UnityEngine.Audio; // for AudioMixerGroup
 
 
 /* -----------------------------------------
@@ -31,6 +32,57 @@ soundSource.loop      = true; // play looping
 soundSource.volume    = 1.0f; // 0.0f to 1.0f
 soundSource.pitch     = 1.0f; // 0.0f to 3.0f
 soundSource.panStereo = 0.0f; // (left) -1.0f to 1.0f (right)
+
+soundSource.Play();
+
+
+/* -----------------------------------------
+	Play a Sound with Audio Mixer Group
+----------------------------------------- */
+
+/* 
+
+    note: Create a AudioMixerGroup, Assets > Create > AudioMixer
+          Open the AudioMixer and under "Groups" you can add AudioGroups to mass manipulate sounds
+          e.g. useful for separating sounds to SFX/Music/Voice etc. or adding mass effects
+
+          Right click on the "Volume" parameter of the mixer group and right click to expose it.
+          At the top right of the Audio Mixer, click "Exposed Parameters" and you can rename it.
+          You can right click any parameter and expose it so you can manipulate it with audioMixer.SetFloat()
+
+*/
+
+// helper function to map numbers between two ranges
+public static float RangeMap(float value, float a1, float a2, float b1, float b2) {
+    return b1 + (value - a1) * (b2 - b1) / (a2 - a1);
+}
+
+AudioClip       soundClip;
+AudioSource     soundSource;
+AudioMixerGroup soundMixer;
+
+soundSource = gameObject.AddComponent<AudioSource>();
+
+soundSource.clip      = soundClip;
+soundSource.loop      = true; // play looping
+soundSource.volume    = 1.0f; // 0.0f to 1.0f
+soundSource.pitch     = 1.0f; // 0.0f to 3.0f
+soundSource.panStereo = 0.0f; // (left) -1.0f to 1.0f (right)
+
+// set the mixer volume (0 to 1)
+float setVolume = 0.8f;
+Debug.Log("Set volume to: "+setVolume);
+setVolume = RangeMap(setVolume, 0, 1, -80, 0);
+soundMixer.audioMixer.SetFloat("volume", setVolume);
+Debug.Log("Set volume to: "+setVolume+" (db)");
+
+// get the mixer volume (0 to 1)
+float currentVolume;
+soundMixer.audioMixer.GetFloat("volume", out currentVolume); 
+currentVolume = RangeMap(currentVolume, -80, 0, 0, 1);
+Debug.Log("Current volume is: "+currentVolume);
+
+soundSource.outputAudioMixerGroup = soundMixer; // assign the target mixer to the AudioSource
 
 soundSource.Play();
 
@@ -193,4 +245,3 @@ foreach(AudioSource sound in soundSources) {
 	Change Master Volume
 ----------------------------------------- */
 AudioListener.volume = 0.5f;
-
