@@ -529,42 +529,63 @@ EditorPrefs.DeleteAll();
 
 // -------------( SamplePreferencesEditor.cs )--------------
 
+
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class SamplePreferencesEditor : MonoBehaviour
+static class SamplePreferencesEditor
 {
-
+    
     // preference variables
     public static bool   optionVar1 = false;
     public static string optionVar2 = "";
     public static int    optionVar3 = 0;
-
-	// add the section in Preferences
-    [PreferenceItem("My Preferences Title")]
-    public static void MyPreferencesTitle()
+    
+    [SettingsProvider]
+    public static SettingsProvider PreferenceItem()
     {
-		
-        // load stored preferences from EditorPrefs entries
-        optionVar1 = EditorPrefs.GetBool("optionVar1", false); // "false" is default value
-        optionVar2 = EditorPrefs.GetString("optionVar2", "");
-        optionVar3 = EditorPrefs.GetInt("optionVar3", 0);
 
-        // preferences user interface
-        optionVar1 = EditorGUILayout.Toggle("Option 1", optionVar1);
-        optionVar2 = EditorGUILayout.TextField("Option 2", optionVar2);
-        optionVar3 = EditorGUILayout.IntSlider("Option 3", optionVar3, 0, 100);
+        // category and scope (where the settings tab will appear | Scope = User (Preferences), Scope = Project (Project Settings))
+        var provider = new SettingsProvider("Preferences/My Preference Item", SettingsScope.User)
+        {
 
-        // save user changes
-        if (GUI.changed) {
-            // save stored preferences to EditorPrefs entries
-			EditorPrefs.SetBool("optionVar1", optionVar1);
-            EditorPrefs.SetString("optionVar2", optionVar2);
-            EditorPrefs.SetInt("optionVar3", optionVar3);
-        }
-		
+            // item label
+            label = "My Preference Item",
+            
+            // GUI items
+            guiHandler = (searchContext) =>
+            {
+
+                // load stored preferences from EditorPrefs entries
+                optionVar1 = EditorPrefs.GetBool("optionVar1", false); // "false" is default value
+                optionVar2 = EditorPrefs.GetString("optionVar2", "");
+                optionVar3 = EditorPrefs.GetInt("optionVar3", 0);
+
+                // preferences user interface
+                optionVar1 = EditorGUILayout.Toggle("Option 1", optionVar1);
+                optionVar2 = EditorGUILayout.TextField("Option 2", optionVar2);
+                optionVar3 = EditorGUILayout.IntSlider("Option 3", optionVar3, 0, 100);
+
+                // save user changes
+                if (GUI.changed) {
+                    // save stored preferences to EditorPrefs entries
+                    EditorPrefs.SetBool("optionVar1", optionVar1);
+                    EditorPrefs.SetString("optionVar2", optionVar2);
+                    EditorPrefs.SetInt("optionVar3", optionVar3);
+                }
+
+            },
+
+            // search keywords
+            keywords = new HashSet<string>(new[] { "custom", "options" })
+
+        };
+
+        return provider;
     }
 }
+
 
 
 // -------------( SamplePreferencesEditor.cs )--------------

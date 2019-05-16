@@ -9,6 +9,15 @@ using UnityEngine;
 using UnityEngine.Audio; // for AudioMixerGroup
 
 
+/*
+
+	note: By default Audio in Unity games may lag and cause crackling. It is best to adjust
+		  the DSP buffer size as needed and according to the audio filesizes & targets.
+		  Go to Edit > Project Settings... > Audio
+		  Under "DSP Buffer Size" option select either "Good Latency" or "Best Performance"
+
+*/
+
 /* -----------------------------------------
    Play Sound (Once)
 ----------------------------------------- */
