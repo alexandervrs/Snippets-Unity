@@ -1,12 +1,12 @@
 
 /**
- * SpriteFont.cs
+ * BitmapFont.cs
  * Sprite/Bitmap font related snippets for Unity
  */
 
 
 /* -----------------------------------------
-   Setup Sprite Font
+   Setup Bitmap Font
 ----------------------------------------- */
 
 /*

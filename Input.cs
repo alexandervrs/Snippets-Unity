@@ -81,6 +81,15 @@ void OnMouseDrag () {
 
 }
 
+// hide the mouse cursor
+Cursor.visible = false;
+
+// lock the mouse cursor to the center of the view
+Cursor.lockState = CursorLockMode.Locked;
+
+// release the mouse cursor
+Cursor.lockState = CursorLockMode.None;
+
 
 /* -----------------------------------------
    Gamepad Control

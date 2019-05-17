@@ -23,6 +23,15 @@ new Vector3(
 	), Quaternion.identity
 ) as GameObject;
 
+// OR load from a "Resources" folder (could be adjusted to load from AssetBundle instead)
+GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("MyPrefab"),
+new Vector3(
+	gameObject.transform.position.x, 
+	gameObject.transform.position.y, 
+	gameObject.transform.position.z
+	), Quaternion.identity
+) as GameObject;
+
 // (optional) set the sprite's draw order (if it has a SpriteRenderer component)
 SpriteRenderer spriteRenderer   = newObj.GetComponent<SpriteRenderer>();
 sprite.sortingLayerID           = SortingLayer.NameToID("Enemies"); // sorting layer name
@@ -30,7 +39,7 @@ sprite.sortingOrder             = 0;                                // order in 
 
 
 /* -----------------------------------------
-   Create new GameObject
+   Create new Empty GameObject
 ----------------------------------------- */
 GameObject emptyGameObject = new GameObject("Player");
 emptyGameObject.AddComponent<SpriteRenderer>();
