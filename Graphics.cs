@@ -9,7 +9,7 @@ using UnityEngine;
 
 
 /* -----------------------------------------
-   Draw a Quad
+   Draw a Quad (Low level)
 ----------------------------------------- */
 /// Class Body:
 Material drawMaterial;
@@ -57,6 +57,53 @@ GL.PopMatrix(); // restores both projection and modelview matrices off the top o
 
 /// OnDestroy():
 Destroy(drawMaterial); // destroy the material when object is destroyed
+
+
+/* -----------------------------------------
+   Draw a Quad using MeshRenderer
+----------------------------------------- */
+/// Class Body:
+Mesh mesh;
+MeshRenderer meshRenderer;
+MeshFilter meshFilter;
+Material material;
+
+/// Start():
+mesh = new Mesh();
+
+mesh.Clear();
+
+Vector3[] vertices = new Vector3[4];
+vertices[0] = -Vector3.right + Vector3.up;
+vertices[1] = Vector3.right + Vector3.up;
+vertices[2] = -Vector3.right - Vector3.up;
+vertices[3] = Vector3.right - Vector3.up;
+
+Vector2[] UVs = new Vector2[4];
+UVs[0] = new Vector2(0, 1);
+UVs[1] = new Vector2(1, 1);
+UVs[2] = new Vector2(0, 0);
+UVs[3] = new Vector2(1, 0);
+
+int[] triangles = new int[6] { 
+	0, 1, 2, // triangle A
+	2, 1, 3  // triangle B
+};
+
+mesh.vertices = vertices;
+mesh.uv = UVs;
+mesh.triangles = triangles;
+
+mesh.RecalculateNormals();
+
+meshFilter = gameObject.AddComponent<MeshFilter>();
+meshFilter.mesh = mesh;
+
+meshRenderer = gameObject.AddComponent<MeshRenderer>();
+meshRenderer.material = material;
+
+meshRenderer.sortingLayerName = "Default";
+meshRenderer.sortingOrder     = 0;
 
 
 /* -----------------------------------------

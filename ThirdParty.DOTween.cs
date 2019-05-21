@@ -47,20 +47,20 @@ void OnDestroy()
    Tween Transform
 ----------------------------------------- */
 
-// animate move
+// animate position
 gameObject.transform.DOMove(new Vector3(
 	gameObject.transform.position.x+1.0f, 
 	gameObject.transform.position.y, 
 	gameObject.transform.position.z
 ), 1.5f).SetEase(Ease.OutSine);
 
-// animate rotate
+// animate rotation
 gameObject.transform.DORotate(new Vector3(
 	gameObject.transform.rotation.x-180.0f, 
 	gameObject.transform.rotation.y+180.0f, 
 	gameObject.transform.rotation.z-180.0f
-), 1.5f, RotateMode.FastBeyond360).SetEase(Ease.OutSine);
-// note: RotateMode: LocalAxisAdd & WorldAxisAdd are relative like you are using Rotate(), sometimes they are better e.g. rotating around a 3D object
+), 1.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutSine);
+// note: RotateMode: FastBeyond360 is fast way to do simple rotations, LocalAxisAdd & WorldAxisAdd are relative like you are using Rotate(), sometimes they are better e.g. rotating around a 3D object
 
 // animate scale
 gameObject.transform.DOScale(new Vector3(
