@@ -107,6 +107,35 @@ meshRenderer.sortingOrder     = 0;
 
 
 /* -----------------------------------------
+   Draw a Path using LineRenderer
+----------------------------------------- */
+/// Class Body:
+Material material;
+
+/// Start():
+LineRenderer line = gameObject.AddComponent<LineRenderer>();
+line.material = material;
+
+line.material = new Material(material);
+
+line.startWidth = 0.1f;
+line.endWidth   = 0.1f;
+
+line.startColor = Color.red;
+line.endColor   = Color.blue;
+// OR line.colorGradient
+
+line.numCornerVertices = 8;
+line.numCapVertices = 8;
+
+line.positionCount = 4;
+line.SetPosition(0, new Vector3(-3, 0, 0));
+line.SetPosition(1, new Vector3(3, 0, 0));
+line.SetPosition(2, new Vector3(6, 4, 0));
+line.SetPosition(3, new Vector3(-3, 0, 1));
+
+
+/* -----------------------------------------
    Draw Mesh standalone
 ----------------------------------------- */
 /// Class Body:
