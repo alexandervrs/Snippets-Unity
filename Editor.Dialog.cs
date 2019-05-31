@@ -40,7 +40,7 @@ if (EditorUtility.DisplayDialog("Warning", "Do you want to take this action?", "
 /// Class Body:
 Object selectedObject = null;
 
-/// OnGUI:
+/// OnGUI():
 if (GUILayout.Button("ShowObjectPicker")) {
 	int controlID = EditorGUIUtility.GetControlID(FocusType.Passive);
 	EditorGUIUtility.ShowObjectPicker<Sprite>(null, true, "", controlID); // "true" is allowSceneObjects
