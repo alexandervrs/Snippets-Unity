@@ -29,6 +29,7 @@ using System.Reflection; // for MethodInfo, BindingFlags only
 SceneView.duringSceneGui -= OnSceneGUI;
 SceneView.duringSceneGui += OnSceneGUI;
 
+/// Class Body:
 void OnSceneGUI(SceneView view) {
 	
 	Debug.Log("OnSceneGUI()");

@@ -201,8 +201,14 @@ void OnSelectionChange() {
 	Debug.Log("OnSelectionChange");
 }
 
-// called from the Scene window
-// usually for mesh editing or displaying gizmos in the Scene window
+// called from the Scene window, but needs to be registered first
+// usually for mesh editing or displaying custom gizmos in the Scene window
+
+/// OnEnable():
+SceneView.duringSceneGui -= OnSceneGUI;
+SceneView.duringSceneGui += OnSceneGUI;
+
+/// Class Body:
 void OnSceneGUI(SceneView view) {
 	Debug.Log("OnSceneGUI: "+view);
 }
