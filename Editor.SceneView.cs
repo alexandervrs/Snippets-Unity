@@ -38,7 +38,7 @@ void OnSceneGUI(SceneView view) {
 
 
 /* -----------------------------------------
-   Handle Mouse Events (OnSceneGUI())
+   Listen for Mouse Events (OnSceneGUI())
 ----------------------------------------- */
 // listen for continuous mouse events
 view.wantsMouseMove = true;
