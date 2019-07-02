@@ -14,10 +14,11 @@ using UnityEngine;
 /*
 
     1. Setup Physics via Edit > Project Settings > Physics/Physics 2D, especially tweak Y Gravity (e.g. -50), once
-	2. Add the GameObject with a Collider Component (e.g. Box Collider) & a Rigidbody (note: 2D elements need Collider2D/Rigidbody2D)
-    3. Set Rigidbody to:
+	2. If you need the Objects to slide against each other, you can assign a Default Physics Material with Dynamic and Static friction set to 0
+	3. Add the GameObject with a Collider Component (e.g. Box Collider) & a Rigidbody (note: 2D elements need Collider2D/Rigidbody2D)
+    4. Set Rigidbody to:
        Mass: 100, Drag: 1, Angular Drag: 0.9, Use Gravity (disabled if needed), Interpolate, Detection: Continuous Dynamic
-    4. Add another GameObject to serve as obstacle, add also a Collider or Collider2D to it
+    5. Add another GameObject to serve as obstacle, add also a Collider or Collider2D to it
 	
 */
 
@@ -91,6 +92,16 @@ physicsBody.MovePosition(new Vector3(0, 0, 0));
 /* -----------------------------------------
    Collision Events
 ----------------------------------------- */
+
+/* 
+   note: Collision events need a Collider and Rigidbody Component in order to fire
+         OnTrigger* events are executed if the Collider is marked as a Trigger and 
+         does not apply any forces when the GameObject collides with another
+  
+         3D collision uses Collision & OnCollision* / OnTrigger* events
+         2D collision uses Collision2D & OnCollision*2D / OnTrigger*2D events
+*/
+		 
 /// Class Body:
 
 void OnCollisionEnter(Collision collisionInfo)
@@ -106,5 +117,20 @@ void OnCollisionStay(Collision collisionInfo)
 void OnCollisionExit(Collision collisionInfo)
 {
     Debug.Log("On Collision Exit with "+collisionInfo.gameObject.name);
+}
+
+void OnTriggerEnter(Collision collisionInfo)
+{
+    Debug.Log("On Trigger Enter with "+collisionInfo.gameObject.name); 
+}
+
+void OnTriggerStay(Collision collisionInfo)
+{
+    Debug.Log("On Trigger Stay with "+collisionInfo.gameObject.name);
+}
+
+void OnTriggerExit(Collision collisionInfo)
+{
+    Debug.Log("On Trigger Exit with "+collisionInfo.gameObject.name);
 }
 

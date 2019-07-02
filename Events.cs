@@ -69,7 +69,12 @@ void OnRenderImage(RenderTexture source, RenderTexture destination)
     Graphics.Blit(source, destination);
 }
 
-// called from any Object
+// called before rendering this Object
+void OnWillRenderObject() {
+    Debug.Log("On Will Render Object");	
+}
+
+// called from this Object
 void OnRenderObject()
 {
     Debug.Log("On Render Object");
@@ -136,7 +141,7 @@ void OnApplicationPause(bool pauseStatus)
    Collision Events
 ----------------------------------------- */
 
-/* note: Collision Events concern Rigidbodies and Colliders (see Physics.cs snippet file) */
+/* note: Collision/Trigger Events concern Rigidbodies and Colliders (see Physics.cs snippet file) */
 
 void OnCollisionEnter(Collision collisionInfo)
 {
@@ -152,6 +157,22 @@ void OnCollisionExit(Collision collisionInfo)
 {
     Debug.Log("On Collision Exit with "+collisionInfo.gameObject.name);
 }
+
+void OnTriggerEnter(Collision collisionInfo)
+{
+    Debug.Log("On Trigger Enter with "+collisionInfo.gameObject.name); 
+}
+
+void OnTriggerStay(Collision collisionInfo)
+{
+    Debug.Log("On Trigger Stay with "+collisionInfo.gameObject.name);
+}
+
+void OnTriggerExit(Collision collisionInfo)
+{
+    Debug.Log("On Trigger Exit with "+collisionInfo.gameObject.name);
+}
+
 
 
 /* -----------------------------------------

@@ -27,7 +27,8 @@ public class MyClassObjectContents
 
 
 /* Step 2: create a class for the chaining methods */
-public static class ChainedClass {
+public static class ChainedClass 
+{
 
 	// optional (only if you use SetDescription()/GetDescription() below)
     static MyClassObjectContents item = new MyClassObjectContents();
