@@ -19,7 +19,7 @@ using UnityEngine;
     
     2. Click on your Camera (usually named "Main Camera")
        Change Orthographic Size, 5.4 is proper for full view in the above aspect ratios, 
-       Field of View 56 is decent for Perspective Camera
+       Field of View 56.74 is decent for Perspective Camera
 	
  */
 
