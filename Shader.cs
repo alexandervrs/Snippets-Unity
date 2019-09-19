@@ -45,15 +45,14 @@ void OnDestroy()
 // first create the Shader, e.g. Grayscale.shader
 
 // -------------( Grayscale.shader )--------------
-Shader "VisualFX/Sprite/Grayscale"
+Shader "VFX/Sprite/Grayscale"
 { 
 	// exposed properties
     Properties
     {
         _MainTex("Base (RGB)", 2D) = "white" {}
         _Alpha("Alpha", Range (0, 1)) = 1.0
-        _Color("Color", Color) = (1, 1, 1, 1)
-        _FXAmount("FXAmount", Range (0, 1)) = 1.0
+        _EffectAmount("Effect Amount", Range (0, 1)) = 1.0
     }
 
     SubShader
@@ -93,11 +92,18 @@ Shader "VisualFX/Sprite/Grayscale"
             };
 
 			// uniforms
-            uniform float _FXAmount;
-            sampler2D _MainTex;
-			
-            float _Alpha;
-            float4 _Color;
+            uniform float     _EffectAmount;
+            uniform sampler2D _MainTex;
+            uniform float     _Alpha;
+            uniform float4    _Color;
+
+            // grayscale filter
+            float4 grayscale(float4 inColor, float amount)
+            {
+                float3 grayscaleColor = dot(inColor.rgb, float3(0.3, 0.59, 0.11));
+                return lerp(inColor, float4(grayscaleColor, inColor.a), amount);
+
+            }
 
 			// vertex shader
             v2f vert(appdata_t IN)
@@ -112,10 +118,20 @@ Shader "VisualFX/Sprite/Grayscale"
 			// fragment shader
             float4 frag (v2f i) : COLOR
             {
-                float4 c = tex2D(_MainTex, i.texcoord)*i.color;
-                c.rgb = lerp(c.rgb, dot(c.rgb, float3(0.3, 0.59, 0.11)), _FXAmount); // GLSL mix() is lerp() in HLSL
-                c.a = c.a*_Alpha;
-                return float4(c.rgb, c.a);
+                float4 textureColor = tex2D(_MainTex, i.texcoord);
+
+                // grayscale effect
+                float4 grayscaleOutput = grayscale(textureColor, _EffectAmount);
+                grayscaleOutput.a = textureColor.a*_Alpha;
+
+                // final output
+                float4 finalOutput = grayscaleOutput;
+                finalOutput.rgb   *= i.color.rgb;
+                finalOutput.a      = finalOutput.a * _Alpha * i.color.a;
+                finalOutput.rgb   *= finalOutput.a;
+                finalOutput.a      = saturate(finalOutput.a);
+                return finalOutput;
+
             }
 
             ENDCG
@@ -129,8 +145,8 @@ Shader "VisualFX/Sprite/Grayscale"
 }
 // -------------( Grayscale.shader )--------------
 
-// then attach Shader a Material, find shader under VisualFX > Sprite > Grayscale
-// Shader exposes the Main texture, Alpha and FXAmount to control the effect
+// then attach Shader a Material, find shader under VFX > Sprite > Grayscale
+// Shader exposes the Main texture, Alpha and EffectAmount to control the effect
 // Set material to GameObject in order to apply the effect, either in Editor or runtime
 
 
@@ -146,14 +162,14 @@ Shader "VisualFX/Sprite/Grayscale"
 // first create the Shader, e.g. GrabPassGrayscale.shader
 
 // -------------( GrabPassGrayscale.shader )--------------
-Shader "VisualFX/GrabPass/Grayscale"
+Shader "VFX/GrabPass/Grayscale"
 { 
 	// exposed properties
     Properties
     {
         _MainTex("Sprite Texture", 2D) = "white" {}  // optional: allow SpriteRenderer texture
         _Alpha("Alpha", Range (0, 1)) = 1.0
-        _FXAmount("FXAmount", Range (0, 1)) = 1.0
+        _EffectAmount("Effect Amount", Range (0, 1)) = 1.0
     }
 
     SubShader
@@ -196,11 +212,10 @@ Shader "VisualFX/GrabPass/Grayscale"
             };
 
 			// uniforms
-            uniform float _FXAmount;
-            sampler2D _GrabTexture;
-            sampler2D _MainTex;
-			
-            float _Alpha;
+            uniform float _EffectAmount;
+            uniform sampler2D _GrabTexture;
+            uniform sampler2D _MainTex;
+            uniform float _Alpha;
 
 			// vertex shader
             v2f vert(appdata_t IN)
@@ -220,7 +235,7 @@ Shader "VisualFX/GrabPass/Grayscale"
                 float4 c2 = tex2D(_MainTex, i.texcoord)*i.color;  // optional: allow SpriteRenderer texture
                 
                 float4 c = tex2D(_GrabTexture, i.screencoord)*i.color;
-                c.rgb = lerp(c.rgb, dot(c.rgb, float3(0.3, 0.59, 0.11)), _FXAmount);
+                c.rgb = lerp(c.rgb, dot(c.rgb, float3(0.3, 0.59, 0.11)), _EffectAmount);
                 // c.a = c.a*_Alpha;
                 c.a = c2.a*_Alpha; // optional: allow SpriteRenderer texture alpha
                 return float4(c.rgb, c.a);
@@ -237,8 +252,8 @@ Shader "VisualFX/GrabPass/Grayscale"
 }
 // -------------( GrabPassGrayscale.shader )--------------
 
-// then attach Shader a Material, find shader under VisualFX > GrabPass > Grayscale
-// Shader exposes the Main texture (optional for smooth effects), Alpha and FXAmount to control the effect
+// then attach Shader a Material, find shader under VFX > GrabPass > Grayscale
+// Shader exposes the Main texture (optional for smooth effects), Alpha and EffectAmount to control the effect
 // Set material to GameObject in order to apply the effect, either in Editor or runtime
 // GrabPass shaders affect the region that your Sprite or Quad occupies and are applied to anything under it (via Sorting Layer / Z order)
 
@@ -267,12 +282,12 @@ float blurFilterAmount = 3.0f;
 int uniformFXAmount;
 
 /// Start():
-// get materials for the postprocess shaders, we use "VisualFX/PostProcess/" to differentiate from Sprite-related shaders
-grayscaleFilterMaterial = new Material( Shader.Find("VisualFX/PostProcess/Grayscale") );
-blurFilterMaterial      = new Material( Shader.Find("VisualFX/PostProcess/Blur") );
+// get materials for the postprocess shaders, we use "VFX/PostProcess/" to differentiate from Sprite-related shaders
+grayscaleFilterMaterial = new Material( Shader.Find("VFX/PostProcess/Grayscale") );
+blurFilterMaterial      = new Material( Shader.Find("VFX/PostProcess/Blur") );
 
 // store the Shader uniforms as IDs
-uniformFXAmount = Shader.PropertyToID("_FXAmount");
+uniformFXAmount = Shader.PropertyToID("_EffectAmount");
 
 /// OnRenderImage():
 void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -331,10 +346,10 @@ shaderMaterial.SetVector("_UniformName", new Vector4(0.4f, 0.4f, 0.4f, 0.4f));
 
 // find the shader of a material
 Renderer rend = GetComponent<Renderer>(); // or SpriteRenderer for sprites
-rend.material.shader = Shader.Find("VisualFX/Sprite/Grayscale");
+rend.material.shader = Shader.Find("VFX/Sprite/Grayscale");
 
 // set Uniform value (Float)
-rend.material.SetFloat("_FXAmount", 1.0f);
+rend.material.SetFloat("_EffectAmount", 1.0f);
 
 // set main texture Sampler
 Texture2D tex;
@@ -348,7 +363,7 @@ rend.material.SetTexture("_MainTex", tex);
 Shader shaderGrayscalePost;
 
 /// Start():
-shaderGrayscalePost = Shader.Find("VisualFX/PostProcess/Grayscale");
+shaderGrayscalePost = Shader.Find("VFX/PostProcess/Grayscale");
 
 // check if shader is supported on the GPU
 if (!shaderGrayscalePost.isSupported) {
