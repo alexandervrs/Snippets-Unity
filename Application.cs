@@ -22,6 +22,7 @@ QualitySettings.vSyncCount = 1;
 /* -----------------------------------------
    Set Framerate
 ----------------------------------------- */
+QualitySettings.vSyncCount = 0; // vSyncCount needs to be 0 for Application.targetFrameRate to work
 Application.targetFrameRate = 60;
 
 
