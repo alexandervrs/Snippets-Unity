@@ -299,6 +299,10 @@ void OnRenderImage(RenderTexture source, RenderTexture destination)
 	RenderTexture temp  = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
 	RenderTexture temp2 = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
 
+    // clear the RenderTextures
+    temp.DiscardContents();
+    temp2.DiscardContents();
+
     // first shader pass, using Graphics.Blit() to copy the contents of source rendertexture to temp rendertexture after applying grayscaleFilterMaterial
     grayscaleFilterMaterial.SetFloat(uniformFXAmount, grayscaleFilterAmount);
 	Graphics.Blit(source, temp, grayscaleFilterMaterial);
