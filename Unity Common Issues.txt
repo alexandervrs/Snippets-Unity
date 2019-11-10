@@ -1,0 +1,67 @@
+
+/* -----------------------------------------
+   Audio
+----------------------------------------- */
+
+* Gap between music loops
+
+	a. MP3s have a default gap and cannot loop seamlessly, use OGG or WAV for music files
+
+* Gap when trying to play a music loop after a music intro section
+
+	a. Use audioSource.PlayDelayed() instead of Play() with a custom delay, this eliminates any gapping
+	
+* Crackling when playing sounds
+
+	a. Fix Audio Latency
+	   Go to Edit > Project Settings... > Audio
+	   Under "DSP Buffer Size" option select either "Good Latency" or "Best Performance"
+	
+
+/* -----------------------------------------
+   Camera
+----------------------------------------- */
+
+* Camera contents are not visible
+
+	a. Check the Z order of the Camera
+	b. Check that the Culling Mask includes the Layers you are trying to render
+	c. Check that the Near and Far Clipping Planes include the GameObjects you're trying to render
+	
+	
+/* -----------------------------------------
+   Timing
+----------------------------------------- */
+
+* Framerate locked
+
+	a. Disable Vsync and Target Framerate with: QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
+	
+
+/* -----------------------------------------
+   Particles
+----------------------------------------- */
+
+* Particle System is not visible
+
+	a. Check the Sorting Layer and Order under the Particle System's "Renderer" module
+	b. Check the Z order
+	c. If in Canvas, check that the Canvas has the right Sorting Layer/Order & Override Sorting flag enabled
+	   Also check the GameObject's scale
+	d. Check if "Play On Awake" is enabled in the Particle System and it has fired once already out of view
+	e. Timing issues, a Sequence that never reaches a particular frame, so the Particle System never fires
+	f. Check if anything is making the GameObject, that is holding the Particle System, not Active
+	   
+
+/* -----------------------------------------
+   Material & Shaders
+----------------------------------------- */
+	
+* Shader not found or is null, or Material cannot be created
+
+	a. Check String namespace in Shader for typos
+	b. Check if Shader is referenced in a Material, otherwise needs to be inside a "Resources" folder in order to be compiled or in a ShaderVariantCollection
+	   Unity will not compile and include Shaders that are not referenced somewhere. Materials created via script using Shaders never used anywhere else are prone to this
+	c. Check if Shader is inside correct and loaded AssetBundle
+	d. Check if Shader is supported with shader.isSupported before using it and provide fallback
+	

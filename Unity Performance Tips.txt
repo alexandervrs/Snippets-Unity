@@ -1,0 +1,177 @@
+
+/* -----------------------------------------
+   Textures
+----------------------------------------- */
+
+a. Optimize textures, resize to Sprite Atlas max size, split, downscale, trim excess
+b. Prefer 16bit Textures over 32bit when possible
+c. Turn off Read/Write in Textures if you don't need it
+d. Disable alpha for textures that don't need transparency (e.g. backgrounds without alpha)
+e. Pack textures into Sprite Atlases, distribute them according to their usage
+
+
+/* -----------------------------------------
+   Sprites
+----------------------------------------- */
+
+a. Color Tint a Sprite will break batching, only do it when necessary or use a colored image instead
+b. Use skeletal animation instead of frame-by-frame Sprite animations when possible (e.g Spine), it's
+   easier on the Graphics Card's fillrate
+c. Use Tilemap instead of Sprites if possible, Composite Collider can be used for collisions with the tiles
+
+
+/* -----------------------------------------
+   Materials & Shaders
+----------------------------------------- */
+
+a. Use Material Property Blocks when you deal with many materials that could share the same settings
+b. Use Shader Property IDs to reference Shader Uniforms/Material variables instead of strings
+c. Avoid GrabPass for post-processing when possible, use Graphics.Blit() instead
+d. Create "Uber Shaders" with all common special effects for a GameObject so they run the Shader effects in a single pass
+e. Use more performant Shaders like under "Mobile" category if possible
+f. Always check for leaks in Materials if you don't use "sharedMaterial". "material" makes a copy of the material you want to change
+   but you need to manually destroy it in the end
+g. Avoid using blur & smooth shadow Shaders if possible, expensive on low-end devices. Use a blurred graphic instead if possible
+h. Enable Instancing for Shaders to reduce Draw calls
+i. Don't use Lit Shaders when you are not making use of Lighting
+j. Calculations like pow, exp, log, cos, sin, tan in Shaders are a bit expensive
+k. Share as many Materials across GameObjects as possible
+l. Use half precision variables in Shaders instead of float where possible
+
+
+/* -----------------------------------------
+   GameObjects
+----------------------------------------- */
+
+a. Spawn and reuse GameObject instances using a Pool instead of Instantiate()
+b. Use Particles instead of spawning many GameObjects for visual effects
+c. Set GameObjects that don't need to transform & share same material as Static in the Inspector, combines static GameObjects into big Meshes
+d. Use ECS for a lot of instances with similar behaviour
+e. Disable GameObjects when they are not needed
+
+
+/* -----------------------------------------
+   Components
+----------------------------------------- */
+
+a. Cache Components, GetComponent<>(), GameObject.Find(), FindObjectOfType<>() etc. only on Awake()/Start() if possible
+b. Disable Components in GameObjects when not needed
+
+
+/* -----------------------------------------
+   Scenes
+----------------------------------------- */
+
+a. Unload or suspend any Scenes in the background that are loaded with LoadSceneMode.Additive when you don't need them
+b. Unload any unused Assets when done
+
+
+/* -----------------------------------------
+   Asset Bundles
+----------------------------------------- */
+
+a. Pack only necessary Assets in Asset Bundles
+b. Do not load unnecessary Assets in the Scene from the bundle
+c. Stay alert of what Assets your included Prefabs reference when packing them in an Asset Bundle
+   Referenced Assets are also included which may result in duplicate packed assets & duplication in memory
+
+
+/* -----------------------------------------
+   Camera
+----------------------------------------- */
+
+a. Cull object event processing outside of Camera view when possible
+b. Don't use Camera.main, refer to the Camera you need instead, cache Cameras etc.
+c. Reduce the Camera's Far amount, especially when using 2D to render less GameObjects or limit the World size
+d. Use Occlusion Culling for GameObjects that don't need to be rendered if possible
+e. Render the game display in lower resolution and upscale to target resolution
+f. Avoid fullscreen Post-Processing effects with Graphics.Blit() when possible, expensive on low-end devices
+
+
+/* -----------------------------------------
+   Particle Systems
+----------------------------------------- */
+
+a. Limit Particle count
+b. Avoid alpha-blended/additive Particle Material in the Particle System Renderer when possible
+
+
+/* -----------------------------------------
+   Audio
+----------------------------------------- */
+
+a. For short frequent sound effects use WAV audio and "Decompress on Load" option with ADPCM format
+b. For longer sound effects use WAV audio and "Compressed In Memory" option with ADPCM format
+c. For music tracks use "Streaming" or "Compressed In Memory" with Vorbis compression. 
+   Streaming relies on fast hardware I/O but it's easier on the RAM, "Compressed In Memory" takes up RAM and time to decompress
+d. Enable "Force Mono" for sounds for mobile devices
+
+
+/* -----------------------------------------
+   UI
+----------------------------------------- */
+
+a. OnGUI() is slow, try to group calls to it if you need it
+b. Group UI elements on separate Canvas elements, so Draw changes don't affect the entire Canvas
+c. Turn off "Raycast Target" for non-interactive UI GameObjects
+d. Use Sprites instead of UI Images when you don't need the responsive features, Sprites are faster because of batching
+e. Use TextMeshPro instead of UI Text
+
+
+/* -----------------------------------------
+   Mesh & Models
+----------------------------------------- */
+
+a. Use Mesh.CombineMeshes() to join meshes when possible
+
+
+/* -----------------------------------------
+   Lighting
+----------------------------------------- */
+
+a. Limit Light source count
+b. Use Baked Lighting whenever possible
+c. Emissive Maps or Shader blended Sprites can be used to fake lighting
+
+
+/* -----------------------------------------
+   Physics
+----------------------------------------- */
+
+a. Using Physics.Raycast() only extend it as much as you need, make use of "Layer Mask" to only detect GameObjects you need
+b. Use Primitive Colliders instead of Mesh Colliders when possible
+c. Set Rigidbody to "is Kinematic" if you manually move them in order to save processing
+
+
+/* -----------------------------------------
+   Quality Settings
+----------------------------------------- */
+
+a. Turn off Graphics Antialiasing
+b. Settle for 30 FPS instead of 60
+   Application.targetFrameRate = 30 and in Project Settings > Timing, set Fixed Timestep: 0.03, Maximum Allowed: 0.05
+c. Disable Soft Shadows if you don't need them
+   
+
+/* -----------------------------------------
+   Project Settings
+----------------------------------------- */
+
+a. Enable "Multi Threaded Rendering" in Build Settings
+
+
+/* -----------------------------------------
+   Scripting
+----------------------------------------- */
+
+a. Precalculate what you need on Awake()/Start() if possible
+b. Use lookup tables for values that can be precalculated e.g. sin/cos or strings
+c. Set variables to null when done, destroy references to GameObjects only with GameObject.Destroy()
+d. Use structs for faster/temp references, classes for references you need longer. Classes create new objects which will need to be
+   cleaned up manually or will trigger the GC at some point, structs do not
+e. Use String interpolation with $"text {value}" instead of concatenating strings
+f. Prefer Update() over FixedUpdate()
+g. Remove empty Update() functions in Scripts, they are still being called for a small cost
+h. Use Callbacks/Events instead of Update() for things that don't need constant updating (e.g. Update items when you get a new item)
+i. Turn off Debug Logging with Debug.unityLogger
+j. Check for memory leaks from resources not handled by the GC
