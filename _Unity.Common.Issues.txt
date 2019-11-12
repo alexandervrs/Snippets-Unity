@@ -17,6 +17,10 @@
 	   Go to Edit > Project Settings... > Audio
 	   Under "DSP Buffer Size" option select either "Good Latency" or "Best Performance"
 	
+* Audio doesn't play when loaded from AssetBundle & shows "Error: Cannot create FMOD::Sound instance"
+
+	a. Check if the AudioClip is using "Streaming" setting and change it
+	
 
 /* -----------------------------------------
    Camera
@@ -65,3 +69,13 @@
 	c. Check if Shader is inside correct and loaded AssetBundle
 	d. Check if Shader is supported with shader.isSupported before using it and provide fallback
 	
+
+/* -----------------------------------------
+   GameObjects
+----------------------------------------- */
+
+* GameObject is not visible in 2D projection, even with negative Z and correct  SortingLayer/Order
+
+	a. Check that GameObject's Scale Z is not 0
+	
+
