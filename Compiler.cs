@@ -1,7 +1,7 @@
 
 /**
- * Platform.cs
- * Platform-specific compilation related snippets for Unity
+ * Compiler.cs
+ * Compiler related snippets for Unity
  */
 
 /* using */
@@ -9,8 +9,29 @@ using UnityEngine;
  
 
 /* -----------------------------------------
+   Custom define values
+----------------------------------------- */
+
+/*
+
+	1. Go to Project Settings > Player and choose a platform
+	2. Look for "Scripting Define Symbols" field
+	3. Type in your custom defines separated by semicolon ;
+	   e.g. VERSION_FOR_APPSTORE
+	4. then anywhere in your Scripts you can use:
+	
+*/
+
+#if VERSION_FOR_APPSTORE
+Debug.Log("This code only compiles and executes when VERSION_FOR_APPSTORE is defined");
+#else
+Debug.Log("This code only compiles and executes when VERSION_FOR_APPSTORE is NOT defined");
+#endif
+ 
+/* -----------------------------------------
    Compile the code on specific platform
 ----------------------------------------- */
+
 #if UNITY_STANDALONE_WIN
 Debug.Log("Platform is Windows");
 #endif

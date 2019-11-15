@@ -5,7 +5,7 @@
 
 * Gap between music loops
 
-	a. MP3s have a default gap and cannot loop seamlessly, use OGG or WAV for music files
+	a. MP3s have a default gap to their sides and cannot loop seamlessly, use OGG or WAV for music files
 
 * Gap when trying to play a music loop after a music intro section
 
@@ -43,6 +43,15 @@
 	
 
 /* -----------------------------------------
+   Tiles
+----------------------------------------- */
+
+* Tiles show seams between each tile when moving or zooming the Camera
+
+	a. Create a SpriteAtlas and add the tiles to it, change the "Padding" setting accordingly
+	
+	
+/* -----------------------------------------
    Particles
 ----------------------------------------- */
 
@@ -64,12 +73,29 @@
 * Shader not found or is null, or Material cannot be created
 
 	a. Check String namespace in Shader for typos
-	b. Check if Shader is referenced in a Material, otherwise needs to be inside a "Resources" folder in order to be compiled or in a ShaderVariantCollection
-	   Unity will not compile and include Shaders that are not referenced somewhere. Materials created via script using Shaders never used anywhere else are prone to this
+	b. Check if Shader is compiled. Unity will not compile and include Shaders that are not referenced somewhere.
+	
+		To reference and compile a Shader, do one of the following:
+	
+		* Drag and drop a Material asset that uses the Shader you want in a public variable field of a GameObject in the Scene
+		* Use an invisible GameObject with a Sprite or Mesh Renderer that references the Material that uses the Shader you want
+		* Include the shader in a ShaderVariantCollection and use Warmup(), if Asset Bundle references a Scene, the Shader and ShaderVariantCollection needs to be loaded from another AssetBundle, as Scene Asset Bundles cannot include any resources that the Scene is not referencing
+		* Place the Shader inside a "Resources" folder, that will force compile the Shader but also cause it to be included in the main application, it is maybe not ideal if you want to include the Shader in an Asset Bundle
+	
 	c. Check if Shader is inside correct and loaded AssetBundle
 	d. Check if Shader is supported with shader.isSupported before using it and provide fallback
 	
 
+* Applying a Shader effect to a full Texture shows a part of a Sprite Atlas
+	
+	a. In the Texture Import Settings change "Wrap Mode" to "Clamp"
+	
+	
+* Applying a Shader effect does not affect the entire Texture area
+
+	a. In the Texture Import Settings change "Mesh Type" to "Full Rect"
+
+	
 /* -----------------------------------------
    GameObjects
 ----------------------------------------- */
@@ -78,4 +104,11 @@
 
 	a. Check that GameObject's Scale Z is not 0
 	
+	
+/* -----------------------------------------
+   Editor
+----------------------------------------- */
+	
+* Unity does not open Scene and Prefabs normally but tries to open them in the default text editor instead
 
+	a. Update Visual Studio Code package using the Package Manager

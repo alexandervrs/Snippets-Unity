@@ -32,6 +32,30 @@ AssetDatabase.Refresh();
 // saves all unsaved item changes to disk
 AssetDatabase.SaveAssets();
 
+// open an asset using the default action
+AssetDatabase.OpenAsset(Selection.activeObject);
+
+// open an asset in an external editor using the default action and go to specified line and column
+AssetDatabase.OpenAsset(Selection.activeObject, 5, 2); // goes to line 5 and column 2
+
+// validate selected asset as folder
+Object testAsset = Selection.activeObject;
+if (AssetDatabase.IsValidFolder((AssetDatabase.GetAssetPath(testAsset)))) {
+	Debug.Log("Current selected asset is Folder");
+}
+
+// validate selected asset as file
+Object testAsset = Selection.activeObject;
+if ((AssetDatabase.Contains(testAsset)) && !AssetDatabase.IsValidFolder((AssetDatabase.GetAssetPath(testAsset)))) {
+	Debug.Log("Current selected asset is File");	
+}
+
+// validate selected asset as Scene
+Object testAsset = Selection.activeObject;
+if (AssetDatabase.GetMainAssetTypeAtPath(AssetDatabase.GetAssetPath(testAsset)) == typeof(SceneAsset)) {
+	Debug.Log("Current selected asset is Scene");
+}
+
 // check if selected asset exists
 Object testAsset = (Object)AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(Selection.activeObject), typeof(Object));
 if (testAsset !=null && AssetDatabase.Contains(testAsset)) {
@@ -81,6 +105,9 @@ EditorSceneManager.CloseScene(EditorSceneManager.GetActiveScene(), true); // tru
 
 // retrieve a scene by its name
 Scene findScene = EditorSceneManager.GetSceneByName("Level1");
+
+// trigger a user save dialog, usually before changing scenes
+EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
 
 
 /* -----------------------------------------

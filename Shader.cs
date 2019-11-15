@@ -269,6 +269,20 @@ Shader "VFX/GrabPass/Grayscale"
 //       Apply the following to a Camera GameObject:
 //
 
+/* 
+
+    Important note: Shaders used as Post Processing and not linked to a Material in the Hierarchy or Prefab are not going to be compiled 
+                    or included in Asset Bundles.
+					
+					To reference and compile a Shader, do one of the following:
+	
+					* Drag and drop a Material asset that uses the Shader you want in a public variable field of a GameObject in the Scene
+					* Use an invisible GameObject with a Sprite or Mesh Renderer that references the Material that uses the Shader you want
+					* Include the shader in a ShaderVariantCollection and use Warmup(), if Asset Bundle references a Scene, the Shader and ShaderVariantCollection needs to be loaded from another AssetBundle, as Scene Asset Bundles cannot include any resources that the Scene is not referencing
+					* Place the Shader inside a "Resources" folder, that will force compile the Shader but also cause it to be included in the main application, it is maybe not ideal if you want to include the Shader in an Asset Bundle
+
+*/
+
 /// Class Body:
 // create materials for the shaders
 Material grayscaleFilterMaterial;
@@ -375,16 +389,34 @@ if (!shaderGrayscalePost.isSupported) {
 }
 
 
-/* -----------------------------------------
-   Preload all Shaders
------------------------------------------ */
-// fully load all shaders to prevent future performance hiccups
-Shader.WarmupAllShaders();
+/* -----------------------------------------------
+   Shader Variant Collections, preload Shaders
+----------------------------------------------- */
+
+/* 
+
+	Shaders are being prepared the first time they are used, this can cause a performance hiccup
+    Use ShaderVariantCollections to prewarm shaders before using them
+    Also can be used to mark Shaders for compilation/inclusion in the app or AssetBundle
+
+    1. Go to Assets > Create > Shader > Shader Variant Collection
+    2. Add the shaders to the ShaderVariantCollection
+    3. Use Warmup() to preload the Shaders
+
+*/
 
 
-/* -----------------------------------------
-   Use Checkbox for uniform in Inspector
------------------------------------------ */
+
+/// Class Body:
+ShaderVariantCollection variant;
+
+/// Awake(), Start():
+variant.Warmup();
+
+
+/* -----------------------------------------------------------
+   Use Checkbox for Shader Property/Uniform in Inspector
+----------------------------------------------------------- */
 /// Properties:
 [Toggle(OPTION_COLORIZE_B)] _InvertAlpha ("Colorize Blue", Float) = 0
 
