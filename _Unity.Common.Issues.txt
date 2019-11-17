@@ -103,8 +103,17 @@
 * GameObject is not visible in 2D projection, even with negative Z and correct  SortingLayer/Order
 
 	a. Check that GameObject's Scale Z is not 0
+
+
+/* -----------------------------------------
+   Scripting
+----------------------------------------- */
 	
+* Building fails on iOS
+
+	a. Make sure you're not using the keyword "dynamic" as iOS does not allow dynamic code generation
 	
+
 /* -----------------------------------------
    Editor
 ----------------------------------------- */
@@ -112,3 +121,4 @@
 * Unity does not open Scene and Prefabs normally but tries to open them in the default text editor instead
 
 	a. Update Visual Studio Code package using the Package Manager
+
