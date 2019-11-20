@@ -56,19 +56,22 @@ soundSource.Play();
           e.g. useful for separating sounds to SFX/Music/Voice etc. or adding mass effects
 
           Right click on the "Volume" parameter of the mixer group and right click to expose it.
-          At the top right of the Audio Mixer, click "Exposed Parameters" and you can rename it.
-          You can right click any parameter and expose it so you can manipulate it with audioMixer.SetFloat()
+          At the top right of the Audio Mixer panel, click "Exposed Parameters" and you can rename it to e.g. "Volume".
+          You can right click any parameter and expose it so you can manipulate it with audioMixer.SetFloat()/audioMixer.GetFloat()
 
 */
 
-// helper function to map numbers between two ranges
-public static float RangeMap(float value, float a1, float a2, float b1, float b2) {
-    return b1 + (value - a1) * (b2 - b1) / (a2 - a1);
-}
-
+/// Class Body:
 AudioClip       soundClip;
 AudioSource     soundSource;
-AudioMixerGroup soundMixer;
+AudioMixer      soundMixer;
+AudioMixerGroup mixerGroup;
+
+// have a slider in the Inspector for the volume, to test
+[Range(0.001f, 1)]
+public float mixerVolume;
+
+/// Start():
 
 soundSource = gameObject.AddComponent<AudioSource>();
 
@@ -78,22 +81,22 @@ soundSource.volume    = 1.0f; // 0.0f to 1.0f
 soundSource.pitch     = 1.0f; // 0.0f to 3.0f
 soundSource.panStereo = 0.0f; // (left) -1.0f to 1.0f (right)
 
-// set the mixer volume (0 to 1)
-float setVolume = 0.8f;
-Debug.Log("Set volume to: "+setVolume);
-setVolume = RangeMap(setVolume, 0, 1, -80, 0);
-soundMixer.audioMixer.SetFloat("volume", setVolume);
-Debug.Log("Set volume to: "+setVolume+" (db)");
-
-// get the mixer volume (0 to 1)
-float currentVolume;
-soundMixer.audioMixer.GetFloat("volume", out currentVolume); 
-currentVolume = RangeMap(currentVolume, -80, 0, 0, 1);
-Debug.Log("Current volume is: "+currentVolume);
-
-soundSource.outputAudioMixerGroup = soundMixer; // assign the target mixer to the AudioSource
+// assign the target mixer group (e.g. with name "SoundEffects") to the AudioSource
+mixerGroup = soundMixer.FindMatchingGroups("SoundEffects")[0];
+soundSource.outputAudioMixerGroup = mixerGroup;
 
 soundSource.Play();
+
+// note: put the following in Update() to test the slider
+
+// set the mixer volume (0 to 1)
+mixerGroup.audioMixer.SetFloat("Volume", Mathf.Log((Mathf.Pow(10, 0 / 20) * mixerVolume))*20);
+
+// get the mixer volume (0 to 1)
+mixerGroup.audioMixer.GetFloat("Volume", out float outVolume);
+outVolume = Mathf.Pow(10, outVolume / 20);
+if (outVolume <= 0.001f) { outVolume = 0; } // remap to 0 if too low
+Debug.Log("Volume is: "+outVolume);
 
 
 /* -----------------------------------------
@@ -212,6 +215,18 @@ chorusFilter.wetMix3 = 0.5f;  // 0 to 1
 chorusFilter.delay   = 30f;   // 0.1 to 100
 chorusFilter.rate    = 0.8f;  // 0 to 20
 chorusFilter.depth   = 0.03f; // 0 to 1
+
+
+/* -----------------------------------------
+	Transition Mixer Snapshots
+----------------------------------------- */
+/// Class Body:
+AudioMixer         soundMixer;
+AudioMixerSnapshot snap;
+AudioMixerSnapshot snap2;
+
+/// Start(), MyMethod():
+soundMixer.TransitionToSnapshots(new AudioMixerSnapshot[2] { snap, snap2 }, new float[2] { 0, 1 }, 2f);
 
 
 /* -----------------------------------------
