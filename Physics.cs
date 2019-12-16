@@ -32,7 +32,7 @@ Rigidbody physicsBody;
 /// Start():
 physicsBody = gameObject.GetComponent<Rigidbody>();
 
-/// Start(), Update():
+/// Start(), Update(), FixedUpdate():
 
 // add force, affects motion (x,y,z)
 physicsBody.AddForce(4000, 4000, 4000);
@@ -59,7 +59,7 @@ Rigidbody physicsBody;
 /// Start():
 physicsBody = gameObject.GetComponent<Rigidbody>();
 
-/// Start(), Update():
+/// Start(), Update(), FixedUpdate():
 
 // allows for infinite rotation/torque
 physicsBody.maxAngularVelocity = Mathf.Infinity;
@@ -134,3 +134,56 @@ void OnTriggerExit(Collision collisionInfo)
     Debug.Log("On Trigger Exit with "+collisionInfo.gameObject.name);
 }
 
+
+/* -----------------------------------------
+   Raycast Collision 2D
+----------------------------------------- */
+/// Update():
+
+RaycastHit2D hit = Physics2D.Raycast(
+    gameObject.transform.position, 
+    new Vector3(gameObject.transform.position.x+0.5f, // check for Collisions +0.5f to the right side of the collider
+                gameObject.transform.position.y, 
+                gameObject.transform.position.z), 
+    10, // how much to extend the check
+    LayerMask.GetMask("Default") // which Layer to check Collisions for, usually you want a layer for "Solid" objects, that way the Raycast won't check itself
+);
+
+// if Raycast hit a Collider
+if (hit.collider != null)
+{
+    // if Collider has a certain tag (e.g. Solid)
+    if (hit.collider.tag == "Solid") {
+
+        Debug.LogError(gameObject.name+" collides with "+hit.collider.name);
+
+    }
+}
+
+
+/* -----------------------------------------
+   Raycast Collision 3D
+----------------------------------------- */
+/// Update():
+
+RaycastHit hit;
+Physics.Raycast(
+    gameObject.transform.position, 
+    new Vector3(gameObject.transform.position.x+0.5f, // check for Collisions +0.5f to the right side of the collider
+                gameObject.transform.position.y, 
+                gameObject.transform.position.z), 
+                out hit,
+    10, // how much to extend the check
+    LayerMask.GetMask("Default")  // which Layer to check Collisions for, usually you want a layer for "Solid" objects, that way the Raycast won't check itself
+);
+
+// if Raycast hit a Collider
+if (hit.collider != null)
+{
+    // if Collider has a certain tag (e.g. Solid)
+    if (hit.collider.tag == "Solid") {
+
+        Debug.LogError(gameObject.name+" collides with "+hit.collider.name);
+
+    }
+}
