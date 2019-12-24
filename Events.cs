@@ -7,6 +7,21 @@
 /* using */
 using UnityEngine;
 using UnityEngine.SceneManagement; // for SceneManager (Used for Scene Events) only
+using UnityEngine.Events; // for UnityEvent
+
+
+/* -----------------------------------------
+   Unity Events
+----------------------------------------- */
+
+// note: having a UnityEvent as public will show it as an Event List in the Inspector
+
+/// Class Body:
+public UnityEvent onCondition;
+
+/// MyMethod():
+// call all the Unity Events under "onCondition"
+this.onCondition?.Invoke();
 
 
 /* -----------------------------------------
