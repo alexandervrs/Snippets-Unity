@@ -38,11 +38,6 @@ void Start()
     Debug.Log("On gameObject Start");
 }
 
-void OnEnable() 
-{
-    Debug.Log("On gameObject Enable");
-}
-
 
 /* -----------------------------------------
    Update Events
@@ -78,10 +73,10 @@ void OnPreRender()
 }
 
 // called from Camera for PostProcessing effects on the Camera RenderTexture
-void OnRenderImage(RenderTexture source, RenderTexture destination)
+void OnRenderImage(RenderTexture sourceTexture, RenderTexture destinationTexture)
 {
     Debug.Log("On Render Image");
-    Graphics.Blit(source, destination);
+    Graphics.Blit(sourceTexture, destinationTexture);
 }
 
 // called before rendering this Object
@@ -114,9 +109,8 @@ void OnBecameVisible()
 }
 
 
-
 /* -----------------------------------------
-   Cleanup Events
+   Active State Events
 ----------------------------------------- */
 
 void OnDisable()
@@ -124,19 +118,25 @@ void OnDisable()
     Debug.Log("On gameObject Disable");
 }
 
-void Destroy()
+void OnEnable() 
 {
-    Debug.Log("On gameObject Destroy");
-}
-
-void OnApplicationQuit()
-{
-    Debug.Log("Application ending after " + Time.time + " seconds");
+    Debug.Log("On gameObject Enable");
 }
 
 
 /* -----------------------------------------
-   Application Focus Events
+   Destruct Events
+----------------------------------------- */
+
+// called when the gameObject is removed from the scene
+void OnDestroy()
+{
+    Debug.Log("On gameObject Destroy");
+}
+
+
+/* -----------------------------------------
+   Application Events
 ----------------------------------------- */
 
 // called when application loses and regains keyboard focus
@@ -151,9 +151,16 @@ void OnApplicationPause(bool pauseStatus)
     Debug.Log("Application is Paused? " +pauseStatus);
 }
 
+// called when application closes
+void OnApplicationQuit()
+{
+    Debug.Log("Application ending after " + Time.time + " seconds");
+}
+
+
 
 /* -----------------------------------------
-   Collision Events
+   Collision Events (Physics 3D)
 ----------------------------------------- */
 
 /* note: Collision/Trigger Events concern Rigidbodies and Colliders (see Physics.cs snippet file) */
@@ -173,21 +180,57 @@ void OnCollisionExit(Collision collisionInfo)
     Debug.Log("On Collision Exit with "+collisionInfo.gameObject.name);
 }
 
-void OnTriggerEnter(Collision collisionInfo)
+void OnTriggerEnter(Collider collisionInfo)
 {
     Debug.Log("On Trigger Enter with "+collisionInfo.gameObject.name); 
 }
 
-void OnTriggerStay(Collision collisionInfo)
+void OnTriggerStay(Collider collisionInfo)
 {
     Debug.Log("On Trigger Stay with "+collisionInfo.gameObject.name);
 }
 
-void OnTriggerExit(Collision collisionInfo)
+void OnTriggerExit(Collider collisionInfo)
 {
     Debug.Log("On Trigger Exit with "+collisionInfo.gameObject.name);
 }
 
+
+/* -----------------------------------------
+   Collision Events (Physics 2D)
+----------------------------------------- */
+
+/* note: Collision2D/Trigger2D Events concern Rigidbodies2D and Colliders2D (see Physics.cs snippet file) */
+
+void OnCollisionEnter2D(Collision2D collisionInfo)
+{
+    Debug.Log("On Collision Enter with "+collisionInfo.gameObject.name); 
+}
+
+void OnCollisionStay2D(Collision2D collisionInfo)
+{
+    Debug.Log("On Collision Stay with "+collisionInfo.gameObject.name);
+}
+
+void OnCollisionExit2D(Collision2D collisionInfo)
+{
+    Debug.Log("On Collision Exit with "+collisionInfo.gameObject.name);
+}
+
+void OnTriggerEnter2D(Collider2D collisionInfo)
+{
+    Debug.Log("On Trigger Enter with "+collisionInfo.gameObject.name); 
+}
+
+void OnTriggerStay2D(Collider2D collisionInfo)
+{
+    Debug.Log("On Trigger Stay with "+collisionInfo.gameObject.name);
+}
+
+void OnTriggerExit2D(Collider2D collisionInfo)
+{
+    Debug.Log("On Trigger Exit with "+collisionInfo.gameObject.name);
+}
 
 
 /* -----------------------------------------
