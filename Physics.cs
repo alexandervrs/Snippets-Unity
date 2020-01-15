@@ -119,17 +119,17 @@ void OnCollisionExit(Collision collisionInfo)
     Debug.Log("On Collision Exit with "+collisionInfo.gameObject.name);
 }
 
-void OnTriggerEnter(Collision collisionInfo)
+void OnTriggerEnter(Collider collisionInfo)
 {
     Debug.Log("On Trigger Enter with "+collisionInfo.gameObject.name); 
 }
 
-void OnTriggerStay(Collision collisionInfo)
+void OnTriggerStay(Collider collisionInfo)
 {
     Debug.Log("On Trigger Stay with "+collisionInfo.gameObject.name);
 }
 
-void OnTriggerExit(Collision collisionInfo)
+void OnTriggerExit(Collider collisionInfo)
 {
     Debug.Log("On Trigger Exit with "+collisionInfo.gameObject.name);
 }
