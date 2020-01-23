@@ -315,6 +315,14 @@ int killed = DOTween.KillAll();
    Tween Effects
 ----------------------------------------- */
 
+// animate jump effect
+// 1.2f is jump power, 1 is number of jumps
+gameObject.transform.DOJump(new Vector3(2, 0, 0), 1.2f, 1, 0.5f).SetEase(Ease.InOutSine);
+
+// animate spiral effect
+// 0.3f is the offset from center that will be reached, null can be a Vector axis (e.g. Vector3.left) in order to constrain the animation to an axis
+gameObject.transform.DOSpiral(2, null, SpiralMode.Expand, 0.3f, 10, 0).SetEase(Ease.InOutSine); 
+
 // animate shake effect
 gameObject.transform.DOShakePosition(2.0f, 0.2f, 110, 90, false, true);
 

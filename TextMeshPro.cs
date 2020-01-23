@@ -34,3 +34,13 @@ using TMPro;
 	   dropdown in the Inspector
 */
 
+
+/* -----------------------------------------
+   Get Rendering Info
+----------------------------------------- */
+
+// get textmesh component
+TextMeshPro textMesh = GetComponent<TextMeshPro>(); // or TextMeshProUGUI for UI Text Mesh
+
+// return the rendered width and height of a TextMesh object
+Vector2 renderedValues = textMesh.GetRenderedValues(true); // true is onlyVisibleCharacters
