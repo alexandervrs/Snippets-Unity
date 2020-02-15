@@ -33,6 +33,11 @@
 	c. Check that the Near and Far Clipping Planes include the GameObjects you're trying to render
 	
 	
+* Cannot do special effects like shaking the Camera while also moving it
+
+	a. Use a parent GameObject for the Camera as a pivot and move that instead for special effects like that
+	
+	
 /* -----------------------------------------
    Timing
 ----------------------------------------- */
@@ -46,7 +51,7 @@
    Tiles
 ----------------------------------------- */
 
-* Tiles show seams between each tile when moving or zooming the Camera
+* Tiles show seams/gaps between each tile when moving or zooming the Camera
 
 	a. Create a SpriteAtlas and add the tiles to it, change the "Padding" setting accordingly
 	
@@ -57,13 +62,18 @@
 
 * Particle System is not visible
 
-	a. Check the Sorting Layer and Order under the Particle System's "Renderer" module
+	a. Check the Layer, Sorting Layer and Order under the Particle System's "Renderer" module
 	b. Check the Z order
-	c. If in Canvas, check that the Canvas has the right Sorting Layer/Order & Override Sorting flag enabled
+	c. If in Canvas, check that the Canvas has the right Layer/Sorting Layer/Order & Override Sorting flag enabled
 	   Also check the GameObject's scale
 	d. Check if "Play On Awake" is enabled in the Particle System and it has fired once already out of view
 	e. Timing issues, a Sequence that never reaches a particular frame, so the Particle System never fires
 	f. Check if anything is making the GameObject, that is holding the Particle System, not Active
+	
+	
+* Particle System cannot appear over other UI elements
+
+	a. Use a parent Canvas element with Override Sorting setting to overlap UI elements manually
 	   
 
 /* -----------------------------------------
@@ -106,6 +116,15 @@
 
 
 /* -----------------------------------------
+   UI
+----------------------------------------- */
+
+* UI element is not being scaled or anchored correctly
+
+	a. Make sure you're pressing Shift &/or Alt when choosing the Anchor Preset on a Rect Transform to also set pivot and position
+	
+
+/* -----------------------------------------
    Scripting
 ----------------------------------------- */
 	
@@ -122,3 +141,23 @@
 
 	a. Update Visual Studio Code package using the Package Manager
 
+	
+/* -----------------------------------------
+   DOTween (Third Party)
+----------------------------------------- */
+
+* Catmull Rom DOPath() with custom path points doesn't seem to follow the correct curve
+
+	a. Make sure the starting point [0] and final point [1] are set in the array *first*, then the in-between points
+	
+	
+* Tween doesn't play
+
+	a. Make sure Autoplay is turned on in DOTween Settings or manually play the Tween using Play()
+	
+
+* PrependInterval() and SetDelay() doesn't work in a Sequence
+
+	a. SetDelay() and PrependInterval() only work if you're using Join() and Append() for your keyframes. Using Insert() and InsertCallback() will ignore PrependInterval() & SetDelay().
+	   Use a custom offset for that, e.g. sequenceName.Insert(startDelay+3, ...)
+	   
