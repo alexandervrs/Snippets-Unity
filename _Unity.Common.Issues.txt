@@ -71,6 +71,11 @@
 	f. Check if anything is making the GameObject, that is holding the Particle System, not Active
 	
 	
+* Particle System particles are not dense (or have gaps, especially for trail-style effects)
+	
+	a. Check the ParticleSystem's "Max Particles" property, maybe the system has reached its limit
+	
+	
 * Particle System cannot appear over other UI elements
 
 	a. Use a parent Canvas element with Override Sorting setting to overlap UI elements manually
