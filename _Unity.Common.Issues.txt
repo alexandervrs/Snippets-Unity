@@ -137,6 +137,13 @@
 
 	a. Make sure you're not using the keyword "dynamic" as iOS does not allow dynamic code generation
 	
+	
+* No Autocomplete in VSCode
+	
+	a. Make sure the C# Omnisharp extension package name hasn't changed, otherwise manually install a VSIX of older version
+	b. Install required Dot Net SDK for the C# extension to work
+	c. Delete all .csproj files in the project folder so Unity can regenerate them
+	
 
 /* -----------------------------------------
    Editor
