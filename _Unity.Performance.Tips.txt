@@ -16,7 +16,7 @@ e. Pack textures into Sprite Atlases, distribute them according to their usage
 
 a. Color Tint a Sprite will break batching, only do it when necessary or use a colored image instead
 b. Use skeletal animation instead of frame-by-frame Sprite animations when possible (e.g Spine), it's
-   easier on the Graphics Card's fillrate
+   easier on the Graphics Card's fillrate, however very complex Spine meshes can be hard on the CPU
 c. Use Tilemap instead of Sprites if possible, Composite Collider can be used for collisions with the tiles
 
 
