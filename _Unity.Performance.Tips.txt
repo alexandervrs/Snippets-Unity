@@ -175,3 +175,4 @@ g. Remove empty Update() functions in Scripts, they are still being called for a
 h. Use Callbacks/Events instead of Update() for things that don't need constant updating (e.g. Update items when you get a new item)
 i. Turn off Debug Logging with Debug.unityLogger
 j. Check for memory leaks from resources not handled by the GC
+k. Don't use myEnumName.HasFlag(), it's very slow, instead do a bitwise comparison ((myEnumName & MyFlags.Flag1) == MyFlags.Flag1)
