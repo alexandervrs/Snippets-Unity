@@ -15,7 +15,8 @@ using UnityEngine;
 /*
 
 	note: On names, "Animator" concerns the "StateMachine", manages when the Animations will play
-		  "Animation" concerns the actual Animation of an object, what properties animate and how but not when it will play
+		  "Animation" concerns the actual Animation of an object, what properties animate and how but not when it will play.
+		  You can animate the properties of multiple GameObjects in a single Animation
 
 	To Setup a StateMachine (Animator) and a couple Animations (Animation):
 		  
@@ -33,6 +34,12 @@ using UnityEngine;
 	
 	note: Dragging and dropping a series of images in Unity "Scene" tab will create a Sprite animation that you can use for these
 		  states and change their frame timing as you wish from the Animation window
+
+	note: If you want a custom default state, you can right click anywhere in the Animator window, create a New State,
+	      right click on the new state and choose "Set as Layer Default State"
+
+	note: In an Animation, to add a default keyframe, you have to right click on the Property you want to animate and "Add Key" 
+	      or hit the "K" key. Remember to do this before animating anything
 	
 */
 
