@@ -57,11 +57,11 @@ moveState = Animator.StringToHash("move");
 /// LateUpdate():
 
 // get info for the current state of your object
-AnimatorStateInfo animStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+AnimatorStateInfo animStateInfo = stateAnimator.GetCurrentAnimatorStateInfo(0);
 
 // test changing state from "idle" -> "move" by pressing the Space key
 if (Input.GetKeyDown(KeyCode.Space) && animStateInfo.shortNameHash == idleState) {
 	// change state and play the Animation associated with it
-	animator.Play(moveState);
+	stateAnimator.Play(moveState);
 }
 
