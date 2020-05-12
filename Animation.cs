@@ -14,7 +14,7 @@ using UnityEngine;
 
 /*
 
-	note: On names, "Animator" concerns the "StateMachine", manages when the Animations will play
+	note: On names, "Animator" concerns the "State Machine", manages when the Animations will play
 		  "Animation" concerns the actual Animation of an object, what properties animate and how but not when it will play.
 		  You can animate the properties of multiple GameObjects in a single Animation
 
