@@ -35,7 +35,7 @@ using UnityEngine;
 	note: Dragging and dropping a series of images in Unity "Scene" tab will create a Sprite animation that you can use for these
 		  states and change their frame timing as you wish from the Animation window
 
-	note: If you want a custom default state, you can right click anywhere in the Animator window, create a New State,
+	note: If you want a custom default state, you can right click anywhere in the Animator window, create a New State
 	      right click on the new state and choose "Set as Layer Default State"
 
 	note: In an Animation, to add a default keyframe, you have to right click on the Property you want to animate and "Add Key" 
