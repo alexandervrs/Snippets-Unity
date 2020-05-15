@@ -76,7 +76,7 @@ if (Input.GetKeyDown(KeyCode.Space) && animStateInfo.shortNameHash == idleState)
 	to the other. If you click on the arrow you can choose to edit the duration of the transition, if you need an instant transition
 	from one state to the other then at the timeline preview drag the two small arrows at the top of the timeline all the way to the left
 	
-	* (Animation) Trigger to enter Transitions:
+	* (Animator) Trigger to enter Transitions:
 	By creating a transition and selecting it, you can choose which Condition triggers that transition to the State. Select the transition
 	and under "Conditions" you can select what triggers the transition. You can edit conditions at the top left of the Animator window under
 	"Parameters" tab. You can choose to create "Triggers" there and you can use those in script with stateAnimator.SetTrigger("triggername")
