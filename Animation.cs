@@ -32,20 +32,6 @@ using UnityEngine;
 	10. To the top left of the panel there should be a dropdown with all the assigned animations in the state machine
 	11. Choose an animation and then click on "Add Property", animate/change the property you wish
 
-	note: If you want a custom default state, you can right click anywhere in the Animator window, create a New State
-	      right click on the new state and choose "Set as Layer Default State"
-
-	note: In an Animation, to add a default keyframe you first have to add the property you intent to animate
-	
-	note: To add a keyframe, you can right click on the property you need to animate and "Add Key" or hit the "K" key with 
-	      the Animation window in focus. Or you can enable frame Recording and change the property you need to animate
-		  
-	note: If your Animation properties appear to have a yellow text, that means the GameObject that they are meant to animate
-	      is missing. You can fix that by clicking on the GameObject name/property and hitting F2 to rename that to the new GameObject name.
-		  If you moved the GameObject in or out the Hierarchy then you need to rename it using "/" to mimic the path of where the GameObject
-		  is now located (e.g. MyParent/MyChild/MyChild2). If you want to go upwards that path you can use "../" instead. 
-		  Doing this will re-link your broken animation GameObjects
-	
 */
 
 /* -----------------------------------------
@@ -76,6 +62,44 @@ if (Input.GetKeyDown(KeyCode.Space) && animStateInfo.shortNameHash == idleState)
 	// change state and play the Animation associated with it
 	stateAnimator.Play(moveState);
 }
+
+/*
+
+	Extra Tips
+
+	* (Animator) Setting a Default State:
+	If you want a custom default state, you can right click anywhere in the Animator window, create a New State
+	right click on the new state and choose "Set as Layer Default State"
+
+	* (Animator) Instant Transition Between States:
+	with having 2 state nodes, you can right click and select "Make Transition", then drag to create a waypoint from one state 
+	to the other. If you click on the arrow you can choose to edit the duration of the transition, if you need an instant transition
+	from one state to the other then at the timeline preview drag the two small arrows at the top of the timeline all the way to the left
+	
+	* (Animation) Trigger to enter Transitions:
+	By creating a transition and selecting it, you can choose which Condition triggers that transition to the State. Select the transition
+	and under "Conditions" you can select what triggers the transition. You can edit conditions at the top left of the Animator window under
+	"Parameters" tab. You can choose to create "Triggers" there and you can use those in script with stateAnimator.SetTrigger("triggername")
+
+	* (Animator) Write Default Values of a Property:
+	In the Animator click on a State and disable "Write Defaults" if you don't want your animated values to be updated. Useful if you
+	want to reset or replay animations
+
+	* (Animation) Adding a Default Keyframe:
+	In an Animation, to add a default keyframe you first have to add the property you intent to animate
+
+	* (Animation) Adding Keyframes:
+	To add a keyframe, you can right click on the property you need to animate and "Add Key" or hit the "K" key with 
+	the Animation window in focus. Or you can enable frame Recording and change the property you need to animate
+	  
+	* (Animation) Re-linking Broken Animation Properties:
+	If your Animation properties appear to have a yellow text, that means the GameObject that they are meant to animate
+	is missing. You can fix that by clicking on the GameObject name/property and hitting F2 key to rename that to the new GameObject name.
+	If you moved the GameObject in or out the Hierarchy then you need to rename it using "/" to mimic the path of where the GameObject
+	is now located (e.g. MyParent/MyChild/MyChild2). If you want to go upwards that path you can use "../" instead. 
+	Doing this will re-link your broken animation GameObjects
+
+*/
 
 
 /* -----------------------------------------
