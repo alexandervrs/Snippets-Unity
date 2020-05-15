@@ -39,6 +39,12 @@ using UnityEngine;
 	
 	note: To add a keyframe, you can right click on the property you need to animate and "Add Key" or hit the "K" key with 
 	      the Animation window in focus. Or you can enable frame Recording and change the property you need to animate
+		  
+	note: If your Animation properties appear to have a yellow text, that means the GameObject that they are meant to animate
+	      is missing. You can fix that by clicking on the GameObject name/property and hitting F2 to rename that to the new GameObject name.
+		  If you moved the GameObject in or out the Hierarchy then you need to rename it using "/" to mimic the path of where the GameObject
+		  is now located (e.g. MyParent/MyChild/MyChild2). If you want to go upwards that path you can use "../" instead. 
+		  Doing this will re-link your broken animation GameObjects
 	
 */
 
