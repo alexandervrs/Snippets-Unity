@@ -106,7 +106,7 @@ a. For short frequent sound effects use WAV audio and "Decompress on Load" optio
 b. For longer sound effects use WAV audio and "Compressed In Memory" option with ADPCM format
 c. For music tracks use "Streaming" or "Compressed In Memory" with Vorbis compression. 
    Streaming relies on fast hardware I/O but it's easier on the RAM, "Compressed In Memory" takes up RAM and time to decompress
-d. Enable "Force Mono" for sounds for mobile devices
+d. You can enable "Force Mono" for sounds for mobile devices, might affect sound quality with headphones though
 
 
 /* -----------------------------------------
