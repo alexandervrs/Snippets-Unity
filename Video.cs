@@ -32,10 +32,20 @@ moviePlayer.isLooping = false;							   // set loop playback
 moviePlayer.clip = movieClip;                              // the video clip to show
 moviePlayer.SetTargetAudioSource(0, movieAudio);           // attach the AudioSource for sound to play
 
-// play the video and invoke callback "OnVideoFinished" when video ends
+// ready the video player, preload the video frames and invoke callback "OnVideoPrepared" when video is ready
+moviePlayer.Prepare();
+moviePlayer.prepareCompleted += OnVideoPrepared;
+
+// play the video and invoke callback "OnVideoFinished" when video ends. Might want to play the video when player is prepared
 moviePlayer.Play();                                       
 moviePlayer.loopPointReached += OnVideoFinished;
 
+// add an event for video prepared callback
+void OnVideoPrepared(VideoPlayer vp)
+{
+	// maybe play the video here?
+	vp.Play();
+}
 
 // add an event for video ended callback
 void OnVideoFinished(VideoPlayer vp)
