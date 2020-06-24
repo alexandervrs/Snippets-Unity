@@ -428,3 +428,35 @@ variant.Warmup();
 c.rgb = c.rgb*float3(0, 2, 2);
 /// ...
 #endif
+
+
+/* -----------------------------------------
+   Support for UI Mask
+----------------------------------------- */
+
+/* 
+	In order to support Mask Component for UI elements,
+	the following must be added to the Shader:
+*/
+
+/// Properties:
+// required for UI.Mask
+[HideInInspector]_StencilComp("Stencil Comparison", Float) = 8
+[HideInInspector]_Stencil("Stencil ID", Float) = 0
+[HideInInspector]_StencilOp("Stencil Operation", Float) = 0
+[HideInInspector]_StencilWriteMask("Stencil Write Mask", Float) = 255
+[HideInInspector]_StencilReadMask("Stencil Read Mask", Float) = 255
+[HideInInspector]_ColorMask("Color Mask", Float) = 15
+
+
+/// Subshader:
+// required for UI.Mask
+Stencil
+{
+	Ref[_Stencil]
+	Comp[_StencilComp]
+	Pass[_StencilOp]
+	ReadMask[_StencilReadMask]
+	WriteMask[_StencilWriteMask]
+}
+
