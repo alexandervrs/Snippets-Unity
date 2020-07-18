@@ -127,7 +127,21 @@
 * UI element is not being scaled or anchored correctly
 
 	a. Make sure you're pressing Shift &/or Alt when choosing the Anchor Preset on a Rect Transform to also set pivot and position
+
 	
+* UI element graphic seems to interact weird with a shader overlay (e.g. jagged pixely or miscolored edges)
+
+	a. Set a Material to the UI component, e.g. Sprites-Default, so the shader can interact with it properly
+	
+
+/* -----------------------------------------
+   Animator / StateMachine
+----------------------------------------- */
+
+* Animation State has a weird waiting time after it is seemingly done
+
+	a. Check if your problematic animation State has a fixed Exit Time set
+
 
 /* -----------------------------------------
    Scripting
