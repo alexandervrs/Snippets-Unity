@@ -63,7 +63,7 @@
 * Particle System is not visible
 
 	a. Check the Layer, Sorting Layer and Order under the Particle System's "Renderer" module
-	b. Check the Z order
+	b. Check the GameObject's Z position, also the Camera's Z position, might be in front of the GameObject
 	c. If in Canvas, check that the Canvas has the right Layer/Sorting Layer/Order & Override Sorting flag enabled
 	   Also check the GameObject's scale
 	d. Check if "Play On Awake" is enabled in the Particle System and it has fired once already out of view
