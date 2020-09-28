@@ -7,7 +7,7 @@
  */
 
 /* using */
-using Spine; // for TrackEntry, AnimationState, Event
+using Spine; // for TrackEntry, AnimationState, Event, SkeletonData
 using Spine.Unity; // for SkeletonAnimation, SkeletonRenderer
 
 
@@ -29,88 +29,89 @@ using Spine.Unity; // for SkeletonAnimation, SkeletonRenderer
    Change Skeleton Animation
 ----------------------------------------- */
 /// Class Body:
-SkeletonAnimation spineSkeleton;
+SkeletonAnimation spineAnimation;
 
 /// Start():
-spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
+spineAnimation = gameObject.GetComponent<SkeletonAnimation>();
 
 /// Start(), Update():
-spineSkeleton.AnimationName = "run"; // set to animation name
-spineSkeleton.timeScale     = 1.0f;  // animation speed timescale
-spineSkeleton.loop          = true;  // is looping
-spineSkeleton.initialFlipX  = false; // whether to flip X
-spineSkeleton.initialFlipY  = false; // whether to flip Y
+spineAnimation.AnimationName = "run"; // set to animation name
+spineAnimation.timeScale     = 1.0f;  // animation speed timescale
+spineAnimation.loop          = true;  // is looping
+spineAnimation.initialFlipX  = false; // whether to flip X
+spineAnimation.initialFlipY  = false; // whether to flip Y
 
 
 /* -----------------------------------------
    Playback control
 ----------------------------------------- */
 /// Class Body:
-SkeletonAnimation spineSkeleton;
+SkeletonAnimation spineAnimation;
 
 /// Start():
-spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
+spineAnimation = gameObject.GetComponent<SkeletonAnimation>();
 
 /* play animation */
-spineSkeleton.AnimationState.SetAnimation(0, "walk", false); // trackID, animationName, loop
-spineSkeleton.AnimationState.TimeScale = 1.0f;
+spineAnimation.AnimationState.SetAnimation(0, "walk", false); // trackID, animationName, loop
+spineAnimation.AnimationState.TimeScale = 1.0f;
 
 // OR 
-spineSkeleton.AnimationName = "";     // clear animation & rewind
-spineSkeleton.AnimationName = "walk"; // set new animation
-spineSkeleton.timeScale     = 1.0f;   // play
+spineAnimation.AnimationName = "";     // clear animation & rewind
+spineAnimation.AnimationName = "walk"; // set new animation
+spineAnimation.timeScale     = 1.0f;   // play
 
 /* stop animation */
-string currentAnimation = spineSkeleton.AnimationName;
-spineSkeleton.AnimationState.ClearTrack(0);
-spineSkeleton.AnimationState.SetAnimation(0, currentAnimation, false);
-spineSkeleton.AnimationState.TimeScale = 0.0f;
+string currentAnimation = spineAnimation.AnimationName;
+spineAnimation.AnimationState.ClearTrack(0);
+spineAnimation.AnimationState.SetAnimation(0, currentAnimation, false);
+spineAnimation.AnimationState.TimeScale = 0.0f;
 // OR 
-string currentAnimation     = spineSkeleton.AnimationName; // keep previous animation
-spineSkeleton.AnimationName = "";                          // clear animation & rewind
-spineSkeleton.AnimationName = currentAnimation;            // restore previous animation
-spineSkeleton.timeScale     = 0.0f;                        // stop
+string currentAnimation     = spineAnimation.AnimationName; // keep previous animation
+spineAnimation.AnimationName = "";                          // clear animation & rewind
+spineAnimation.AnimationName = currentAnimation;            // restore previous animation
+spineAnimation.timeScale     = 0.0f;                        // stop
 
 /* pause animation */
-spineSkeleton.AnimationState.TimeScale = 0.0f;
+spineAnimation.AnimationState.TimeScale = 0.0f;
 // OR 
-spineSkeleton.timeScale = 0.0f;
+spineAnimation.timeScale = 0.0f;
 
 /* resume animation */
-spineSkeleton.AnimationState.TimeScale = 1.0f;
+spineAnimation.AnimationState.TimeScale = 1.0f;
 // OR 
-spineSkeleton.timeScale = 1.0f;
+spineAnimation.timeScale = 1.0f;
 
 
 /* -----------------------------------------
    Animation info
 ----------------------------------------- */
 /// Class Body:
-SkeletonAnimation spineSkeleton;
+SkeletonAnimation spineAnimation;
 
 /// Start():
-spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
+spineAnimation = gameObject.GetComponent<SkeletonAnimation>();
 
-// get animation duration
-float duration = spineSkeleton.Skeleton.Data.FindAnimation("walk").duration;
+// get animation duration of "walk" animation
+float duration = spineAnimation.Skeleton.Data.FindAnimation("walk").duration;
 
 
 /* -----------------------------------------
    Execute Spine Events
 ----------------------------------------- */
 /// Class Body:
-SkeletonAnimation spineSkeleton;
+SkeletonAnimation spineAnimation;
 
 /// Start():
-spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
+spineAnimation = gameObject.GetComponent<SkeletonAnimation>();
 
 // first assign the event
-spineSkeleton.AnimationState.Event += OnSpineEvent; 
+spineAnimation.AnimationState.Event += OnSpineEvent; 
 
 /// Class Body:
 
 // next check for the event
-void OnSpineEvent(TrackEntry trackEntry, Spine.Event e) {
+void OnSpineEvent(TrackEntry trackEntry, Spine.Event e) 
+{
     
     // check for Events labelled "sound" in Spine
     if (e.Data.Name == "sound") {
@@ -124,12 +125,12 @@ void OnSpineEvent(TrackEntry trackEntry, Spine.Event e) {
    Swap Skin
 ----------------------------------------- */
 /// Class Body:
-SkeletonAnimation spineSkeleton;
+SkeletonAnimation spineAnimation;
 
 /// Start():
-spineSkeleton = gameObject.GetComponent<SkeletonAnimation>();
+spineAnimation = gameObject.GetComponent<SkeletonAnimation>();
 
-spineSkeleton.Skeleton.SetSkin("newSkin");
+spineAnimation.Skeleton.SetSkin("your_other_skin_name");
 
 
 /* -----------------------------------------
@@ -137,4 +138,70 @@ spineSkeleton.Skeleton.SetSkin("newSkin");
 ----------------------------------------- */
 /// Start(), Update():
 gameObject.GetComponent<SkeletonRenderer>().skeleton.SetColor( new Color(1.0f, 1.0f, 1.0f, 0.5f) ); // r,g,b,a
+
+
+/* -----------------------------------------
+   List Skins
+----------------------------------------- */
+/// Start():
+Skeleton     spineSkeleton     = gameObject.GetComponent<Skeleton>();
+SkeletonData spineSkeletonData = spineSkeleton.Skeleton.Data;
+
+foreach(Skin thisSkin in spineSkeletonData.Skins) {
+    Debug.Log(thisSkin.Name);
+}
+
+
+/* -----------------------------------------
+   Mix and Match Skin Items
+----------------------------------------- */
+
+/*
+
+    a. Create a Spine project where the character is comprised by multiple Skins, e.g. character has a variety of faces and swords
+       The hierarchy of a part should be like:
+
+        sword : Bone
+            sword: Slot
+                sword: Skin Placeholder
+                    * will be populated with different Image per Skin
+        face : Bone
+            face: Slot
+                face: Skin Placeholder
+                    * will be populated with different Image per Skin
+
+    b. Skin and Images should be placed under their own folders, e.g. gold_sword and iron_sword would go under a "swords" folder.
+       So the Skin hierarchy would be like:
+
+       swords: Folder
+           gold_sword: Skin
+           iron_sword: Skin
+       faces: Folder
+           green_face: Skin
+           blue_face: Skin
+
+       Anything we need in every Skin should just be a regular Image outside of any Skin Placeholders, e.g. any body parts that never change
+
+    c. To add an Image to a specific Skin, click on the Spine Editor hierarchy to make that particular Skin enabled & visible, then drag and drop the Image
+       onto the Skin Placeholder that you want
+
+    d. To swap out a Skin item in-game, we'd need to create a new Skin via a script and copy only the Skin items we need, then assign that
+       new custom Skin to our Skeleton. It's probably a good idea to list through and keep the current Skin items if you want to easily just change one item
+
+*/
+
+// get data about our Skeleton
+Skeleton     spineSkeleton      = gameObject.GetComponent<Skeleton>();
+SkeletonData spineSkeletonData  = spineSkeleton.Skeleton.Data;
+
+// create a new custom skin
+Skin customSkin = new Skin("custom");
+
+// add data from the current skin to the new custom skin (might want to have the previous skin saved, so you can restore current parts if you need to just swap out one item)
+customSkin.AddSkin(spineSkeletonData.FindSkin("faces/green_face")); // use the green_face Skin item
+customSkin.AddSkin(spineSkeletonData.FindSkin("swords/gold_sword")); // use the gold_sword Skin item
+
+// set the Skin to be the custom skin we created
+spineSkeleton.SetSkin(customSkin);
+spineSkeleton.SetSlotsToSetupPose();
 
