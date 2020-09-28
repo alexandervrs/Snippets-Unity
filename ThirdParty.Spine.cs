@@ -186,20 +186,22 @@ foreach(Skin thisSkin in spineSkeletonData.Skins) {
        onto the Skin Placeholder that you want
 
     d. To swap out a Skin item in-game, we'd need to create a new Skin via a script and copy only the Skin items we need, then assign that
-       new custom Skin to our Skeleton. It's probably a good idea to list through and keep the current Skin items if you want to easily just change one item
+       new custom Skin to our Skeleton
 
 */
 
 // get data about our Skeleton
 Skeleton     spineSkeleton      = gameObject.GetComponent<Skeleton>();
 SkeletonData spineSkeletonData  = spineSkeleton.Skeleton.Data;
+Skin         currentSkin        = spineSkeleton.Skin;
 
 // create a new custom skin
 Skin customSkin = new Skin("custom");
 
-// add data from the current skin to the new custom skin (might want to have the previous skin saved, so you can restore current parts if you need to just swap out one item)
-customSkin.AddSkin(spineSkeletonData.FindSkin("faces/green_face")); // use the green_face Skin item
-customSkin.AddSkin(spineSkeletonData.FindSkin("swords/gold_sword")); // use the gold_sword Skin item
+// copy data from the current skin to the new custom skin
+customSkin.AddSkin(currentSkin);
+// change the sword to the gold_sword Skin item
+customSkin.AddSkin(spineSkeletonData.FindSkin("swords/gold_sword"));
 
 // set the Skin to be the custom skin we created
 spineSkeleton.SetSkin(customSkin);
