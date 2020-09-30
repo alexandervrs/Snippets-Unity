@@ -1,11 +1,17 @@
 
 /**
- * Input.cs
- * Input related snippets for Unity
+ * InputManager.cs
+ * Input Manager legacy related snippets for Unity
  */
 
 /* using */
 using UnityEngine;
+
+
+/*
+	note: This is about Unity's older Input Manager, the new Input System package 
+		  should be preferred instead, see InputSystem.cs for more
+*/
 
 
 /* -----------------------------------------
@@ -27,68 +33,6 @@ if (Input.GetKeyUp(KeyCode.Escape)) {
 if (Input.GetKey(KeyCode.Escape)) {
 	// ESCAPE key held down ...
 }
-
-
-/* -----------------------------------------
-   Mouse Control
------------------------------------------ */
-// check mouse click on object (Requires a BoxCollider2D component)
-void OnMouseDown() {
-
-	if (Input.GetMouseButtonDown(0)) {
-		
-		var ray = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-
-		if (Physics.Raycast(ray, out hit, 100)) {
-
-			if (hit.collider.gameObject) {
-				// clicked on object ...
-			}
-
-		}
-		
-	}
-
-}
-
-
-// move GameObject at mouse x,y continuously
-// Update():
-Vector3 mousePosition = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
-gameObject.transform.position = new Vector3(mousePosition.x, mousePosition.y, gameObject.transform.position.z);
-
-
-// move GameObject by drag and drop
-// Class Body:
-Vector3 screenSpace;
-Vector3 offset;
-
-void OnMouseDown(){
-	
-	Camera mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-    screenSpace = mainCamera.WorldToScreenPoint(transform.position);
-    offset = transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y, screenSpace.z));
-   
-}
-
-void OnMouseDrag () {
- 
-	Camera mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-    Vector3 curScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenSpace.z);    
-    Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenSpace) + offset;
-    transform.position = curPosition;
-
-}
-
-// hide the mouse cursor
-Cursor.visible = false;
-
-// lock the mouse cursor to the center of the view
-Cursor.lockState = CursorLockMode.Locked;
-
-// release the mouse cursor
-Cursor.lockState = CursorLockMode.None;
 
 
 /* -----------------------------------------
@@ -121,6 +65,62 @@ if (Input.GetAxisRaw("Horizontal") < 0) {
 	//       "Horizontal": -1 = left, 1 = right
 	//       "Vertical":   -1 = down, 1 = up
 	//                      0 = none
+}
+
+
+/* -----------------------------------------
+   Mouse Control
+----------------------------------------- */
+// check mouse click on object (Requires a BoxCollider2D component)
+void OnMouseDown() 
+{
+
+	if (Input.GetMouseButtonDown(0)) {
+		
+		var ray = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, 100)) {
+
+			if (hit.collider.gameObject) {
+				// clicked on object ...
+			}
+
+		}
+		
+	}
+
+}
+
+
+// move GameObject at mouse x,y continuously
+// Update():
+Vector3 mousePosition = GameObject.Find("Main Camera").GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
+gameObject.transform.position = new Vector3(mousePosition.x, mousePosition.y, gameObject.transform.position.z);
+
+
+// move GameObject by drag and drop
+// Class Body:
+Vector3 screenSpace;
+Vector3 offset;
+
+void OnMouseDown()
+{
+	
+	Camera mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+    screenSpace = mainCamera.WorldToScreenPoint(transform.position);
+    offset = transform.position - mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y, screenSpace.z));
+   
+}
+
+void OnMouseDrag() 
+{
+ 
+	Camera mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+    Vector3 curScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenSpace.z);    
+    Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenSpace) + offset;
+    transform.position = curPosition;
+
 }
 
 
@@ -161,59 +161,6 @@ transform.position = clampedPos;
 
 
 /* -----------------------------------------
-   Open Device Keyboard (Android & iOS)
------------------------------------------ */
-///Class Body:
-private TouchScreenKeyboard deviceKeyboard;
-private string textToEdit = "";
-
-/// Start(), Update():
-
-// show the keyboard on screen
-deviceKeyboard = TouchScreenKeyboard.Open(
-	textToEdit,                       // output text
-	TouchScreenKeyboardType.Default,  // keyboard type, Default, NamePhonePad, NumberPad, EmailAddress
-	false,                            // autocorrect
-	false,                            // multiline
-	true,                             // secure
-	false,                            // alert mode
-	"",                               // text placeholder
-	0                                 // character limit, 0 = infinite
-);
-
-/// Update():
-
-// check status of the keyboard
-switch (deviceKeyboard.status) {
-
-	case TouchScreenKeyboard.Status.Done:
-		// textToEdit variable now has the new value
-		break;
-
-	case TouchScreenKeyboard.Status.Canceled:
-		textToEdit = "";
-		// set variable textToEdit to nothing
-		break;
-	
-	case TouchScreenKeyboard.Status.LostFocus:
-		// keyboard focus was lost
-		break;
-
-}
-
-
-/* -----------------------------------------
-   Vibrate the Device (Android & iOS)
------------------------------------------ */
-// vibrate the device
-#if UNITY_ANDROID || UNITY_IOS
-if (SystemInfo.supportsVibration) {
-	Handheld.Vibrate();
-}
-#endif
-
-
-/* -----------------------------------------
    Handle Hardware Back Button (Android)
 ----------------------------------------- */
 #if UNITY_ANDROID
@@ -224,6 +171,3 @@ if (Input.GetKeyDown(KeyCode.Escape)) {
 	// Back button pressed ... (maps to ESCAPE)
 }
 #endif
-
-
-
