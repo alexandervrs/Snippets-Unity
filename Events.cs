@@ -271,12 +271,14 @@ void OnGUI()
 }
 
 // called when the inspector GUI is being rendered (usually for Inspector)
-void override OnInspectorGUI() {
+void override OnInspectorGUI() 
+{
 	Debug.Log("OnInspectorGUI");	
 }
 
 // called when user selection on the Unity Editor has changed
-void OnSelectionChange() {
+void OnSelectionChange() 
+{
 	Debug.Log("OnSelectionChange");
 }
 
@@ -288,6 +290,7 @@ SceneView.duringSceneGui -= OnSceneGUI;
 SceneView.duringSceneGui += OnSceneGUI;
 
 /// Class Body:
-void OnSceneGUI(SceneView view) {
+void OnSceneGUI(SceneView view) 
+{
 	Debug.Log("OnSceneGUI: "+view);
 }
