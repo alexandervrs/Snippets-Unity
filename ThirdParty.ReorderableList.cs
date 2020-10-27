@@ -1,12 +1,12 @@
 
 /**
- * ReorderableList.cs
+ * ThirdParty.ReorderableList.cs
  * ReorderableList related snippets for Unity
  */
 
 /* using */
 using UnityEngine;
-using Assets.ReorderableList; //  for ReorderableList
+using Malee.List; //  for ReorderableList
 
 
 /*
@@ -18,10 +18,11 @@ using Assets.ReorderableList; //  for ReorderableList
    Setup & Access Reorderable List
 ----------------------------------------- */
 /// Class Body:
+[Reorderable]
 public ListOfItems myReorderableList;
 
 [System.Serializable]
-public class ListOfItems : ReorderableList.Of<MyItemClass>{};
+public class ListOfItems : ReorderableArray<MyItemClass>{};
 
 [System.Serializable]
 public class MyItemClass
