@@ -69,6 +69,7 @@
 	d. Check if "Play On Awake" is enabled in the Particle System and it has fired once already out of view
 	e. Timing issues, a Sequence that never reaches a particular frame, so the Particle System never fires
 	f. Check if anything is making the GameObject, that is holding the Particle System, not Active
+	g. Check if particle Material is using a "Soft Particles" shader, will not show right if "Soft Particles" is not enabled in your Quality Settings 
 	
 	
 * Particle System particles are not dense (or have gaps, especially for trail-style effects)
