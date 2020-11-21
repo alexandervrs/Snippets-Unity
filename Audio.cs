@@ -266,6 +266,18 @@ foreach(AudioSource sound in soundSources) {
 
 
 /* -----------------------------------------
+	Selectively Pause All Sounds
+----------------------------------------- */
+AudioSource soundSource;
+
+// mark any AudioSources that you want excluded from the Pause, e.g. Pause Menu sounds and music
+soundSource.ignoreListenerPause = true;
+
+// then pause the system like:
+AudioListener.pause = true; // unpause by setting it to "false"
+
+
+/* -----------------------------------------
 	Change Master Volume
 ----------------------------------------- */
 AudioListener.volume = 0.5f;
