@@ -91,6 +91,11 @@ if (keyboard.leftArrowKey.isPressed) {
 	// LEFT ARROW key held down ...
 }
 
+// OR use Keyboard.current
+if (Keyboard.current.leftArrowKey.wasPressedThisFrame) {
+	// LEFT ARROW key pressed ...
+}
+
 
 /* -----------------------------------------
    Direct Gamepad Control
@@ -137,3 +142,14 @@ if (keyboard.escapeKey.wasPressedThisFrame) {
 	// Back button pressed ... (maps to ESCAPE)
 }
 #endif
+
+
+/* -----------------------------------------
+   Mouse Position
+----------------------------------------- */
+// move GameObject at mouse x,y continuously
+
+/// Update():
+Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+this.gameObject.transform.position = mousePosition;
+
