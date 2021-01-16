@@ -46,6 +46,23 @@
 
 	a. Disable Vsync and Target Framerate with: QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
 	
+	
+* Movement of GameObjects is not animated smoothly
+
+	a. Check that any movement done in Update() is always multiplied by Time.deltaTime
+
+	
+* Framerate of the game seems too high, animations, particles & other elements seem like they are animating in fast forward
+	
+	a. If your screen refresh rate Hz is higher than the game's framerate & you're using VSync (QualitySettings.vSyncCount not set to 0), this can occur.
+	   You can multiply any movement or animations by a custom limited deltaTime, e.g. using a method like:
+	   
+			public static float CappedDeltaTime => (Time.deltaTime > Time.maximumDeltaTime) ? 1f / Application.targetFrameRate : Time.deltaTime;
+	   
+	   will limit deltaTime to your Application.targetFrameRate, so if that is set to 60, it will limit anything that is multiplied by CappedDeltaTime to 60 FPS.
+	   
+	   You will need to account for GameObject movement in Update(), manually update Particle Systems, manually update Animators & manually update Shader time values.
+	   Remember to also provide an alternative "Variable Framerate" option in your game which will use Time.deltaTime as normal.
 
 /* -----------------------------------------
    Tiles
@@ -116,7 +133,7 @@
    GameObjects
 ----------------------------------------- */
 
-* GameObject is not visible in 2D projection, even with negative Z and correct  SortingLayer/Order
+* GameObject is not visible in 2D projection, even with negative Z and correct SortingLayer/Order
 
 	a. Check that GameObject's Scale Z is not 0
 
@@ -143,6 +160,27 @@
 
 	a. Check if your problematic animation State has a fixed Exit Time set
 
+
+/* -----------------------------------------
+   Input
+----------------------------------------- */
+
+* There is input lag present
+
+	a. Make sure you're not using any Input/InputSystem related methods in FixedUpdate(), always use Update() to check for mouse/keyboard/button presses
+	
+	
+/* -----------------------------------------
+   Physics
+----------------------------------------- */
+
+* The GameObject ignores collisions with other GameObjects
+
+	a. Make sure your GameObject has a Collider & Rigidbody Component attached to it (Collider2D or Collider & Rigidbody2D or Rigidbody based on the Physics type (2D or 3D))
+	b. Check if you are using Translate or changing the gameObject.transform to move the GameObject in Update(), this will cause it to ignore collisions & other Physics settings. 
+	   Use MovePosition(), set velocity or AddForce() in FixedUpdate() instead
+	c. Make sure the GameObject you want to check is in the correct Layer and the other GameObject does not have it excluded in its Layer/Culling Mask
+	
 
 /* -----------------------------------------
    Scripting
