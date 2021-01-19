@@ -117,6 +117,11 @@ EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
 // highlight object in Asset view or Hierarchy (e.g. current active gameObject)
 EditorGUIUtility.PingObject(Selection.activeGameObject);
 
+// highlight first found searched Asset with specified name and type "Prefab"
+string searchFor = "MyPrefabName";
+string[] firstFound = AssetDatabase.FindAssets(searchFor+" t:Prefab"); // remove +" t:Prefab" to search for any type
+EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(firstFound[0]), typeof(UnityEngine.Object)));
+
 // highlight asset source file or folder in Finder/Explorer
 EditorUtility.RevealInFinder(Application.persistentDataPath + "/");
 
