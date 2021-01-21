@@ -131,21 +131,21 @@ gameObject.transform.position = new Vector3(initialPos.x + newPosX, initialPos.y
 
 // randomize from current position and between a range of min -3 and max 3 Units
 gameObject.transform.position = new Vector3(
-	gameObject.transform.position.x+UnityEngine.Random.Range(-3, 3), 
-	gameObject.transform.position.y+UnityEngine.Random.Range(-3, 3), 
-	gameObject.transform.position.z+UnityEngine.Random.Range(-3, 3)
+	gameObject.transform.position.x+UnityEngine.Random.Range(-3f, 3f), 
+	gameObject.transform.position.y+UnityEngine.Random.Range(-3f, 3f), 
+	gameObject.transform.position.z+UnityEngine.Random.Range(-3f, 3f)
 );
 
 // randomize from current position and inside the area of a 3 Unit circle
 gameObject.transform.position = new Vector2(
-	gameObject.transform.position.x+UnityEngine.Random.insideUnitCircle*3, 
-	gameObject.transform.position.y+UnityEngine.Random.insideUnitCircle*3
+	gameObject.transform.position.x+UnityEngine.Random.insideUnitCircle.x*3, 
+	gameObject.transform.position.y+UnityEngine.Random.insideUnitCircle.y*3
 );
 
 // randomize from current position and inside the area of a 3 Unit sphere
 gameObject.transform.position = new Vector3(
-	gameObject.transform.position.x+UnityEngine.Random.insideUnitSphere*3, 
-	gameObject.transform.position.y+UnityEngine.Random.insideUnitSphere*3, 
-	gameObject.transform.position.z+UnityEngine.Random.insideUnitSphere*3
+	gameObject.transform.position.x+UnityEngine.Random.insideUnitSphere.x*3, 
+	gameObject.transform.position.y+UnityEngine.Random.insideUnitSphere.y*3, 
+	gameObject.transform.position.z+UnityEngine.Random.insideUnitSphere.z*3
 );
 
