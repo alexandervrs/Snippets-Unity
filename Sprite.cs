@@ -1,11 +1,58 @@
 
 /**
  * Sprite.cs
- * Sprite related snippets for Unity
+ * Sprite & Sprite Renderer related snippets for Unity
  */
 
 /* using */
 using UnityEngine;
+
+
+/* 
+	Important Note:
+		
+	Using "material" to change properties like color/alpha will cause Unity to create a copy of that material 
+	so you can commit your changes without affecting other objects using the same material
+
+*/
+
+Material mMaterial;
+
+void Start() 
+{
+	// get and store the material index
+	mMaterial = GetComponent<Renderer>().material;
+}
+
+void OnDestroy()
+{
+	// destroy the material on object's Destroy event
+	Destroy(mMaterial);
+}
+		
+/*		
+	You'd also need to use Resources.UnloadUnusedAssets() when done with the scene to remove those copies from memory if they exist
+
+	Alternatively you could use sharedMaterial which does not need Resources.UnloadUnusedAssets() 
+	but will also affect other objects' materials
+*/
+
+
+/* -----------------------------------------
+   Set the Sprite's properties
+----------------------------------------- */
+
+// set the sprite's transparency
+gameObject.GetComponent<SpriteRenderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.4f); // (r,g,b,a), 0.4f is the new alpha value
+
+// get the sprite's transparency
+float alpha = gameObject.GetComponent<SpriteRenderer>().material.color.a;
+
+// flip the sprite horizontally
+gameObject.GetComponent<SpriteRenderer>().flipX = true;
+
+// flip the sprite vertically
+gameObject.GetComponent<SpriteRenderer>().flipY = true;
 
 
 /* -----------------------------------------

@@ -8,40 +8,10 @@
 using UnityEngine;
 
 
-/* 
-	Important Note:
-		
-	Using "material" to change properties like color/alpha will cause Unity to create a copy of that material 
-	so you can commit your changes without affecting other objects using the same material
-
-*/
-
-Material mMaterial;
-
-void Start() 
-{
-	// get and store the material index
-	mMaterial = GetComponent<Renderer>().material;
-}
-
-void OnDestroy()
-{
-	// destroy the material on object's Destroy event
-	Destroy(mMaterial);
-}
-		
-/*		
-	You'd also need to use Resources.UnloadUnusedAssets() when done with the scene to remove those copies from memory if they exist
-
-	Alternatively you could use sharedMaterial which does not need Resources.UnloadUnusedAssets() 
-	but will also affect other objects' materials
-*/
-
-
 /* -----------------------------------------
    Set transform values
 ----------------------------------------- */
-// set position
+// set position (or localPosition for local position movement)
 gameObject.transform.position = new Vector3(
 	gameObject.transform.position.x, 
 	gameObject.transform.position.y-1.0f, 
@@ -61,9 +31,6 @@ gameObject.transform.localScale = new Vector3(
 	gameObject.transform.localScale.y-0.5f, 
 	gameObject.transform.localScale.z-0.5f
 );
-
-// set alpha
-gameObject.transform.GetComponent<Renderer>().material.color = new Vector4(1.0f, 1.0f, 1.0f, 0.4f); // r,g,b,a
 
 
 /* -----------------------------------------
@@ -120,7 +87,7 @@ if (isLerping) {
 
 	if (percentageComplete < 1.0f) {
 
-		transform.position = Vector3.LerpUnclamped(this.start.position, this.end.position, this.curve.Evaluate(s)); // curve can also be an easing function instead
+		transform.position = Vector3.LerpUnclamped(this.start.position, this.end.position, this.curve.Evaluate(s)); // curve can also be an evaluated easing function instead
 
 	} else {
 
@@ -156,4 +123,29 @@ float newPosX = (distanceX * Mathf.Sin(speedX * index));
 float newPosY = (distanceY * Mathf.Sin(speedY * index));
 
 gameObject.transform.position = new Vector3(initialPos.x + newPosX, initialPos.y + newPosY, gameObject.transform.position.z);
+
+
+/* -----------------------------------------
+   Randomize Position
+----------------------------------------- */
+
+// randomize from current position and between a range of min -3 and max 3 Units
+gameObject.transform.position = new Vector3(
+	gameObject.transform.position.x+UnityEngine.Random.Range(-3, 3), 
+	gameObject.transform.position.y+UnityEngine.Random.Range(-3, 3), 
+	gameObject.transform.position.z+UnityEngine.Random.Range(-3, 3)
+);
+
+// randomize from current position and inside the area of a 3 Unit circle
+gameObject.transform.position = new Vector2(
+	gameObject.transform.position.x+UnityEngine.Random.insideUnitCircle*3, 
+	gameObject.transform.position.y+UnityEngine.Random.insideUnitCircle*3
+);
+
+// randomize from current position and inside the area of a 3 Unit sphere
+gameObject.transform.position = new Vector3(
+	gameObject.transform.position.x+UnityEngine.Random.insideUnitSphere*3, 
+	gameObject.transform.position.y+UnityEngine.Random.insideUnitSphere*3, 
+	gameObject.transform.position.z+UnityEngine.Random.insideUnitSphere*3
+);
 
