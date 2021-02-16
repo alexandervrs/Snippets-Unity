@@ -194,8 +194,9 @@
 * No Autocomplete in VSCode
 	
 	a. Make sure the C# Omnisharp extension package name hasn't changed, otherwise manually install a VSIX of older version
-	b. Install required Dot Net SDK for the C# extension to work
+	b. Install required Dot Net SDK for the C# extension to work (e.g. .NET DevPack 4.7.1)
 	c. Delete all .csproj files in the project folder so Unity can regenerate them
+	d. Make sure the Unity VSCode Package is a suitable version for the Omnisharp extension
 	
 
 /* -----------------------------------------
