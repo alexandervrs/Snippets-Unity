@@ -26,7 +26,9 @@ using UnityEngine.Playables; // for PlayableDirector, PlayableGraph, DirectorUpd
           Then drag and drop the Animation on the track, click on it & from the Inspector again uncheck "Remove Start Offset"
 
     note: To make a ParticleSystem play, add an ActivationTrack & choose the GameObject with the ParticleSystem, when the
-          playhead goes through the "Active" segment, then the ParticleSystem will play (once or loop depending on the ParticleSystem settings)
+          playhead goes through the "Active" segment, then the ParticleSystem will play (once or loop depending on the ParticleSystem settings).
+          If you want to smoothly Stop() a ParticleSystem then you either have to account for the lifetime to cover the duration 
+          or use an AnimationClip with a Animation Event that stops that Particle System via code.
 
 */
 
@@ -72,10 +74,12 @@ director.initialTime = 2; // start from 2 seconds (120 frames)
 
 /*
     
-    note: if you manually update the Director playback, Signals and Audio Tracks will not work
+    note: if you manually update the Director playback, Signals and Audio Tracks will not work.
+        Instead of Signals, you can use an AnimationClip that contains an Animation Event (See Animation.cs).
           if you want Audio cues to still play, then use an Activation Track & select a GameObject with an attached
-          AudioSource & make sure "Play On Awake" option is enabled.
-          Instead of Signals, you can use an AnimationClip that contains an Animation Event (See Animation.cs).
+          AudioSource & make sure "Play On Awake" option is enabled. Otherwise you can use an AnimationClip with Animation Event
+          that triggers a sound.
+          
 
 */
 
