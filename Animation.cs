@@ -99,6 +99,18 @@ if (Input.GetKeyDown(KeyCode.Space) && animStateInfo.shortNameHash == idleState)
 	is now located (e.g. MyParent/MyChild/MyChild2). If you want to go upwards that path you can use "../" instead. 
 	Doing this will re-link your broken animation GameObjects
 
+	* (Animation) Adding Animation Events:
+	First create a Script with a public void Method:
+	e.g.
+
+	public void MyAnimationEvent() 
+	{
+		Debug.Log("Animation Event triggered!");
+	}
+
+	Move to the frame you want to add the Animation Event and click on the "tag" looking button to the left or right click on the timeline
+	under the time values and choose "Add Animation Event". Then in the Inspector choose the MyAnimationEvent() function from the dropdown.
+
 */
 
 
