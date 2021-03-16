@@ -13,12 +13,28 @@ using UnityEngine;
 ----------------------------------------- */
 /*
 
-    1. Setup Physics via Edit > Project Settings > Physics/Physics 2D, especially tweak Y Gravity (e.g. -50), once
+    1. For less floaty Physics, less idle jitter, less tunneling (fast rigidbodies going through other rigidbodies) & glitching:
+
+    Go to Edit > Project Settings:
+    In Time, Change Fixed Timestep to 0.0083333
+        (might cost more processing time, but solves quite a few Physics problems with jittering and tunneling)
+    In Physics 2D
+        a. Change Velocity Threshold to 0.0001
+        b. Velocity Iterations to 3
+        c. Position Iterations to 8
+        d. Change Gravity to -49.05 (4 times -9.81)
+    In Physics
+        a. Change Bounce Threshold to 0
+        b. Solver Iteration Count to 6
+        c. Change Gravity to -49.05 (4 times -9.81)
+
 	2. If you need the Objects to slide against each other, you can assign a Default Physics Material with Dynamic and Static friction set to 0
 	3. Add the GameObject with a Collider Component (e.g. Box Collider) & a Rigidbody (note: 2D elements need Collider2D/Rigidbody2D)
     4. Set Rigidbody to:
-       Mass: 100, Drag: 1, Angular Drag: 0.9, Use Gravity (disabled if needed), Interpolate, Detection: Continuous Dynamic.
-       Freeze axes that you don't want to be affected automatically by the Physics.
+       Mass: 1, Drag: 2, Angular Drag: 1, Use Gravity (disabled if needed), use Interpolate if the GameObject is a player character so it syncs
+	   good with the graphics/camera update rate
+       Set "Collision Detection" to "Continuous Dynamic" if your Rigidbody is very fast (e.g. bullet).
+       Freeze axes that you don't want to be affected automatically by the Physics, e.g. usually Rotation for characters.
     5. Add another GameObject to serve as obstacle, add also a Collider or Collider2D to it
 
     note: All Physics/Rigidbody etc. update checks must be done in FixedUpdate() instead of Update()
@@ -44,22 +60,25 @@ physicsBody = gameObject.GetComponent<Rigidbody>();
 physicsBody.MovePosition(new Vector3(1, 1, 0));
 
 // add force, affects position (x,y,z)
-physicsBody.AddForce(4000, 4000, 4000);
+physicsBody.AddForce(100, 100, 100);
 
 // add force relative to the object's coordinate system, affects position (x,y,z)
-physicsBody.AddRelativeForce(4000, 4000, 4000);
+physicsBody.AddRelativeForce(100, 100, 100);
+
+// simulate an explosion force
+physicsBody.AddExplosionForce(400, transform.position, 5, 3.0f, ForceMode.Force);
 
 // changes the rotation of an object
 physicsBody.MoveRotation(Quaternion.Euler(new Vector3(0, 0, 60)));
 
 // add torque, affects rotation (x,y,z)
-physicsBody.AddTorque(4000, 4000, 4000);
+physicsBody.AddTorque(100, 100, 100);
 
 // add torque relative to the object's coordinate system, affects rotation (x,y,z)
-physicsBody.AddRelativeTorque(4000, 4000, 4000);
+physicsBody.AddRelativeTorque(100, 100, 100);
 
 // add force with torque, affects position & rotation (x,y,z)
-physicsBody.AddForceAtPosition(new Vector3(12000, 12000, 12000), transform.position, ForceMode.Force);
+physicsBody.AddForceAtPosition(new Vector3(100, 100, 100), transform.position, ForceMode.Force);
 
 
 /* -----------------------------------------

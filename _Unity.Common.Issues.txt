@@ -180,7 +180,27 @@
 	b. Check if you are using Translate or changing the gameObject.transform to move the GameObject in Update(), this will cause it to ignore collisions & other Physics settings. 
 	   Use MovePosition(), set velocity or AddForce() in FixedUpdate() instead
 	c. Make sure the GameObject you want to check is in the correct Layer and the other GameObject does not have it excluded in its Layer/Culling Mask
-	
+	d. Make sure any Physics for the GameObject are handled in FixedUpdate() instead of Update()
+
+* The GameObject does not settle down when the motion ends & it is jittery & glitchy
+
+	a. Edit > Project Settings > Time, Change "Fixed Timestep" to a value like 0.0083333
+	b. Edit > Project Settings > Physics, Set Bounce Threshold to 0 & Solver Iteration Count to 6
+	c. Edit > Project Settings > Physics 2D, Change Velocity Threshold to 0.0001, Velocity Iterations to 3, Position Iterations to 8
+
+* Gravity of Physics feels floaty
+
+	a. Edit > Project Settings > Physics & Physics 2D, change Gravity to something like -49.05 (4 times -9.81)
+		-9.81 is Earth gravity, but depends on object mass & scale to look correct, however usually you need 
+        to change that for games like platformers. Adjust it more or less based on your needs
+
+* GameObject goes through another GameObject (tunneling)
+
+	a. Make sure both GameObjects have Rigidbodies & Collider components
+	b. If one of the Rigidbodies is too fast, you will need to enable "Collision Detection" to be "Continuous Dynamic" on the Rigidbody Component
+	c. Edit > Project Settings > Time, Change "Fixed Timestep" to a value like 0.0083333, might help as well
+	d. Make sure the Rigidbody mass you want to use as obstacle is not too small against the other one
+
 
 /* -----------------------------------------
    Scripting
