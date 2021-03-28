@@ -95,5 +95,11 @@ float videoDuration = moviePlayer.length;
 // the current frame index
 int frameIndex = moviePlayer.frame;
 
+// seek the video to the specified frame (video needs to be loaded first)
+moviePlayer.frame = 80;
+
+// seek the video to the specified time in seconds (video needs to be loaded first)
+moviePlayer.time = 30.2d; // at 30.2 seconds
+
 // the total frames of the video
 int totalFrames = moviePlayer.frameCount;
