@@ -22,7 +22,7 @@ using UnityEngine.InputSystem;
 
 
 /* -----------------------------------------
-   Abstract Device Control
+   Abstract Device Control with Actions
 ----------------------------------------- */
 
 /*
@@ -34,37 +34,102 @@ using UnityEngine.InputSystem;
 
 	a. First go to Assets > Create > Input Actions
 	b. Name the new asset to anything you like e.g. "PlayerControls" and click on it
-	c. Create a new Action Map, named it anything you like e.g. "Player1"
-	d. Choose the new Action Map "Player1" and click the + button to create a new Action
-	e. Name it e.g. "MoveLeft" and click the + button next to it to "Add Binding"
-	f. Choose a key/button from the list, e.g. "Left Arrow [Keyboard]"
-	g. Add more Actions & Bindings as you see fit, Save and Close the window
-	h. With the asset selected still, from the Inspector, check the option "Generate C# Class" and Apply
-	i. Now you're ready to access those Actions from your own Scripts
+
+	c. Create a new Action Map, named it anything you like e.g. "Player".
+	   We can have different action maps with different bindings later, for e.g. Menu screens etc.
+
+	d. Choose the new Action Map "Player" and click the + button to create a new Action
+	e. Name it e.g. "Movement" and click the + button next to it to "Add 2D Vector Composite", give it a name
+	   like "ArrowKeys", set the "Mode" to "Digital Normalized"
+
+	f. Choose a key/button from the list, e.g. "Left Arrow [Keyboard]" and choose "Composite Part" to be 
+	   the same direction, e.g. Left Arrow should be set to "Left". Add the rest of the directions
+
+	g. Let's add one key/button but is going to be pressed once (not held down like direction)
+	   Choose the new Action Map "Player" and click the + button to create a new Action, name it something like "Jump"
+	h. Click the + button next to it to "Add Binding" & select a key/button from the list
+
+	i. Add more Actions & Bindings as you see fit for the keyboard and different devices, Save and Close the window
+
+	j. With the asset selected still, from the Inspector, check the option "Generate C# Class" and Apply
+	k. Now you're ready to access those Actions from your own Scripts
 
 */
 
 // Class Body:
 public PlayerControls controls; // "PlayerControls" is the name that you gave the Input Actions asset
 
-// Awake()
-controls = new PlayerControls();
-controls.Player1.MoveLeft.performed += PlayerMoveLeft;
-controls.Player1.MoveLeft.canceled += PlayerMoveLeftReleased;
-// move actions handled here ...
+private InputAction inputActionMovement; // We need "Movement" Action accessible from Update() later on
 
-// create a method to handle the event for "MoveLeft" Action
-void PlayerMoveLeft(InputAction.CallbackContext context)
+private Vector2 directionVector; // Vector 2D that results from the "Movement" Action
+
+// (Only if you use Physics)
+private Rigidbody2D physicsBody; // A Rigidbody2D or Ridigbody (3D) if you want to move the gameObject and interact with Physics
+
+private float speed = 3.5f; // simple movement speed for the player, you might need to icrease this if you're using Physics
+
+// Awake():
+// initialize the controls
+controls = new PlayerControls();
+
+// bind the "Jump" action to a callback since it's going to be executed once per press
+controls.Player.Jump.performed += PlayerJump(); // "performed" checks if that button was pressed, "canceled" will check if that button was released
+// move actions handled here if needed ...
+
+// (Only if you use Physics) get the gameObject's Rigidbody component
+physicsBody = gameObject.GetComponent<Rigidbody2D>(); // or "Rigidbody" if you use 3D Physics
+
+// create a method to handle the event for "Jump" Action
+public void PlayerJump()
 {
-	Debug.Log("Player will Move Left");
-	// ...
+	Debug.Log("Jump button pressed");
+	// do any jump-related operations here, you can store a "hasJumped" value in a boolean
+	// to use it later in your Update() or FixedUpdate() for example
 }
 
-// create a method to handle the event for "MoveLeft" Released Action
-void PlayerMoveLeftReleased(InputAction.CallbackContext context)
+
+// very important to enable the controls OnEnable(), otherwise nothing will work
+// OnEnable(), OnDisable():
+void OnEnable()
 {
-	Debug.Log("Player will stop Moving Left");
-	// ...
+    controls.Enable();
+}
+
+void OnDisable()
+{
+    controls.Disable();
+}
+
+// Update():
+// check for directional input
+Vector2 directionVector = inputActionMovement.ReadValue<Vector2>();
+
+// MOVE THE TRANSFORM
+
+// move the gameObject's Transform, will not interact with Physics
+// Update(): 
+if (directionVector != Vector2.zero) {
+
+	// 2D movement (send input X to player's X and input Y to player's Y, do not change player's Z)
+	gameObject.transform.position += (new Vector3(directionVector.x, directionVector.y, 0) * speed) * Time.deltaTime;
+
+	// 3D movement (send input X to player's X and input Y to player's Z, do not change player's Y)
+	//gameObject.transform.position += (new Vector3(directionVector.x, 0, directionVector.y) * speed) * Time.deltaTime;
+
+}
+
+// OR MOVE THE RIGIDBODY
+
+// (Only if you use Physics) move the gameObject's Rigidbody, will also interact with Physics
+// FixedUpdate():
+if (directionVector != Vector2.zero) {
+
+	// 2D movement (send input X to player's X and input Y to player's Y, do not change player's Z)
+	physicsBody.MovePosition((new Vector3(directionVector.x, directionVector.y, 0) * speed) * Time.deltaTime);
+
+	// 3D movement (send input X to player's X and input Y to player's Z, do not change player's Y)
+	//physicsBody.MovePosition((new Vector3(directionVector.x, 0, directionVector.y) * speed) * Time.deltaTime);
+
 }
 
 
