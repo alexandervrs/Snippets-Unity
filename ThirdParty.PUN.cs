@@ -161,6 +161,11 @@ public GameObject playerPrefab; // This will be each prefab representing a Playe
 Debug.Log("Players Connected: "+PhotonNetwork.CurrentRoom.PlayerCount.ToString());
 PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0+UnityEngine.Random.Range(-2, 2), 0+UnityEngine.Random.Range(-2, 2), 0), Quaternion.identity, 0);
 
+// (Optional) increase the server and serialization rate, might result in more smooth sync of movement but use up more bandwidth
+//            usually it's best to implement a better Lerp solution for this instead
+PhotonNetwork.SendRate = 50;
+PhotonNetwork.SerializationRate = 50;
+
 // you can use this string in a TextMeshPro field or anything to identify the player
 Debug.Log("Player Name is: "+photonView.Owner.NickName);
 
