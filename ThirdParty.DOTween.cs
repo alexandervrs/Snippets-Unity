@@ -1,6 +1,6 @@
 
 /**
- * DOTween.cs
+ * ThirdParty.DOTween.cs
  * DOTween related snippets for Unity
  *
  * https://github.com/Demigiant/dotween

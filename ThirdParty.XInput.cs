@@ -1,6 +1,6 @@
 
 /**
- * XInput.cs
+ * ThirdParty.XInput.cs
  * XInput related snippets for Unity
  */
 
@@ -12,6 +12,9 @@ using XInputDotNetPure;
 /*
 	Note: XInputDotNetPure needs its DLLs inside a "Plugins" folder
 		  https://github.com/speps/XInputDotNet/releases
+
+		  If you're using Unity's new InputSystem, there is no need
+		  to use this plugin anymore for controller vibration. See InputSystem.cs
 */
 
 
