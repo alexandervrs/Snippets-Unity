@@ -105,7 +105,8 @@ void OnDisable()
 }
 
 // Update():
-// check for directional input
+// check for directional input from the inputActionMovement:
+// (directionVector.x > 0) = right, (directionVector.x < 0) = left, (directionVector.y > 0) = up, (directionVector.y < 0) = down
 directionVector = inputActionMovement.ReadValue<Vector2>();
 
 // MOVE THE TRANSFORM
