@@ -76,8 +76,12 @@ controls = new PlayerControls();
 controls.Player.Jump.performed += PlayerJump(); // "performed" checks if that button was pressed, "canceled" will check if that button was released
 // move actions handled here if needed ...
 
+// get the "Movement" action reference for later
+inputActionMovement = controls.Player.Movement;
+
 // (Only if you use Physics) get the gameObject's Rigidbody component
 physicsBody = gameObject.GetComponent<Rigidbody2D>(); // or "Rigidbody" if you use 3D Physics
+
 
 // create a method to handle the event for "Jump" Action
 public void PlayerJump()
@@ -102,7 +106,7 @@ void OnDisable()
 
 // Update():
 // check for directional input
-Vector2 directionVector = inputActionMovement.ReadValue<Vector2>();
+directionVector = inputActionMovement.ReadValue<Vector2>();
 
 // MOVE THE TRANSFORM
 
