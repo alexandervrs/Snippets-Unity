@@ -72,13 +72,13 @@ MyPluginFunction("Test"); // call the method from the DLL
 
 /*
 	
-	1. Compile AndroidPlugin.java source to a .jar/.aar file
+	1. Compile AndroidPlugin.java source to a .jar/.aar file or copy the .java files to the project (they will be compiled by Unity)
 
 */
 
 // -------------( AndroidPlugin.java )--------------
 
-package com.test.AndroidPlugin;
+package com.test;
 
 import android.os.Environment;
 import android.content.Intent;
@@ -107,7 +107,9 @@ public class AndroidPlugin
 /*
 
 	2. Place the .jar file into "Plugins" special folder
-	   e.g. "Assets/Plugins/MyJAR/test.jar"
+	   		e.g. "Assets/Plugins/Android/test.jar"
+	   Or alternatively place the .java file under "Plugins"
+	   		e.g. "Assets/Plugins/Android/AndroidPlugin.java"
 
 	3. Click on the jar/aar file in the Unity File Manager, in the Inspector make sure it's marked only for Android
 
@@ -116,7 +118,7 @@ public class AndroidPlugin
 /* 4. Call the JAR/AAR from C# Script */
 
 // JAR/AAR are only for the Android platform
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 
 /// Awake(), Start(), Update():
 
@@ -127,10 +129,40 @@ AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("cu
 // load "com.test.AndroidPlugin" class from test.jar from "Plugins" folder
 AndroidJavaObject androidPluginClass = new AndroidJavaObject("com.test.AndroidPlugin", currentActivity);
 
-// call the MyPluginFunction() from "com.test.AndroidPlugin" with first argument as string, returns back a string
+// call the MyPluginFunction() from "com.test.AndroidPlugin" with first argument "Test", returns back a string, defined by the <string>
 androidPluginClass.Call<string>("MyPluginFunction", new object[] { "Test" });
 
 #endif
+
+/*
+
+	note: Certainly functionality requires certain Permissions. You can place an AndroidManifest.xml file under "Plugins/Android/AndroidManifest.xml"
+	      It will be merged with Unity's generated manifest when building for Android
+
+	Minimal Manifest:
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.unity3d.player"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+	<uses-permission android:name="android.permission.VIBRATE" /> <!-- custom permission example -->
+
+    <application>
+        <activity
+            android:name="com.unity3d.player.UnityPlayerActivity"
+            android:theme="@style/UnityThemeSelector">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+
+*/
 
 
 /* -----------------------------------------
@@ -166,7 +198,7 @@ mergeInto(LibraryManager.library, {
 */
 
 // JSLIB are only for the WebGL platform
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
 
 // Constructor:
 [DllImport("__Internal")] // load from .jslib plugin
