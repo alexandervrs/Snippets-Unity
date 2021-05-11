@@ -61,11 +61,30 @@ director.Pause();
 // resume the timeline asset playback
 director.Resume();
 
+// refresh changes done to the timeline, can be used to refresh the animation of the timeline after a seek operation
+director.RebuildGraph();
+
 // disable automatic playback on start (or change the "Play On Awake" setting on the Component Inspector itself)
 director.playOnAwake = false;
 
 // change from where the Timeline will start playing from
-director.initialTime = 2; // start from 2 seconds (120 frames)
+director.initialTime = 2.0d; // start from 2 seconds (120 frames)
+
+// get the current position of the playhead
+double currentTime = director.time;
+
+// seek/set the current position of the playhead
+director.time = 2.0d; // go to 2 seconds (120 frames)
+
+// check if timeline playback is paused
+if (playableDirector.state == PlayState.Paused) {
+    // timeline is paused ...
+}
+
+// check if timeline playback is stopped
+if (playableDirector.state != PlayState.Playing) {
+    // timeline is stopped ...
+}
 
 
 /* -----------------------------------------
