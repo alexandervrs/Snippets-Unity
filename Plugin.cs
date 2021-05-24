@@ -136,7 +136,7 @@ androidPluginClass.Call<string>("MyPluginFunction", new object[] { "Test" });
 
 /*
 
-	note: Certainly functionality requires certain Permissions. You can place an AndroidManifest.xml file under "Plugins/Android/AndroidManifest.xml"
+	note: Certain functionality requires certain Permissions. You can place an AndroidManifest.xml file under "Plugins/Android/AndroidManifest.xml"
 	      It will be merged with Unity's generated manifest when building for Android
 
 	Minimal Manifest:
