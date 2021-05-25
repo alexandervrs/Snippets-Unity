@@ -326,6 +326,9 @@ gameObject.transform.DOSpiral(2, null, SpiralMode.Expand, 0.3f, 10, 0).SetEase(E
 // animate shake effect
 gameObject.transform.DOShakePosition(2.0f, 0.2f, 110, 90, false, true);
 
+// animate shake effect (only X axis)
+gameObject.transform.DOShakePosition(2.0f, new Vector3(0.2f, 0, 0), 110, 90, false, true);
+
 // animate rubber scale effect
 gameObject.transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 2.5f, 10, 1).SetEase(Ease.OutElastic);
 
